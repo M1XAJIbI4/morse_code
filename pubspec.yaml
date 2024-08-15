@@ -14,6 +14,7 @@ dependencies:
   bloc: ^8.1.4
   injectable: ^2.4.4
   flutter_bloc: ^8.1.6
+  flutter_svg: ^2.0.10+1
   get_it: ^7.7.0
   rxdart: ^0.28.0
   shared_preferences: ^2.3.1
@@ -23,21 +24,30 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.0
   build_runner: ^2.4.11
+  flutter_gen_runner: ^5.6.0
   injectable_generator: ^2.6.2
   logger: ^2.4.0
 
 flutter:
   uses-material-design: true
+  generate: true
+
   assets:
     - assets/images/
+
   fonts:
     - family: Roboto
-    - fonts:
-        - asset: assets/fonts/Roboto-Light.ttf
+      fonts:
+        - asset: assets/fonts/Roboto/Roboto-Light.ttf
           weight: 200
-        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
           weight: 300
-        - asset: assets/fonts/Roboto-Medium.ttf
+        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
           weight: 400
-        - asset: assets/fonts/Roboto-Bold.ttf
+        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
           weight: 500
+   
+flutter_gen:
+  output: lib/gen/
+  integrations:
+    flutter_svg: true
