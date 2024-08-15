@@ -1,4 +1,4 @@
-package org.app.lite.morse_code
+package org.app.lite.morse.code.com
 
 import io.flutter.embedding.android.FlutterActivity
 
