@@ -16,7 +16,7 @@ class _StartScreenState extends State<StartScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-       Future.delayed(const Duration(seconds: 1)).then((_) {
+       Future.delayed(const Duration(seconds: 2)).then((_) {
         _pushHomeScreen();
       });
     });
@@ -28,7 +28,6 @@ class _StartScreenState extends State<StartScreen> {
       body: Center(
         child: SvgPicture.asset(
           Assets.images.logoSvg.path,
-          
         ),
       ),
     );
