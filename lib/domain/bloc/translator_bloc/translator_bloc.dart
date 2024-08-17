@@ -22,13 +22,12 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
     switch (mainEvent) {
       case TranslatorTranslateEvent event: await _onTranslate(event, emit);
       case TranslatorInitializeEvent event: await _onInitialize(event, emit);
+      case TranslatorClearEvent _: await _onClear(emit);
     }
   }
 
   Future<void> _onInitialize(
-    TranslatorInitializeEvent event,
-    Emitter<TranslatorState> emit
-  ) async {
+      TranslatorInitializeEvent event, Emitter<TranslatorState> emit) async {
     _currentMorse = event.morseText;
     _currentOriginal = event.originalText;
     await _emitReady(emit);
@@ -39,24 +38,24 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
     Emitter<TranslatorState> emit,
   ) async {
     try {
-      final (resume, eventOriginal, eventMorse) = (
-        event.resume,
-        event.originalText,
-        event.morseText,
-      );
+      final (resume, text) = (event.resume, event.text);
 
-      print('FOOBAR 1 -$resume $eventOriginal $eventMorse');
-      if (eventOriginal == _currentOriginal ||
-          eventMorse == _currentMorse) {
+      if ((resume == TranslatorResume.textToMorse &&
+              text == _currentOriginal) ||
+          (resume == TranslatorResume.morseToText && text == _currentMorse)) {
         return;
       }
 
-      print('FOOBAR 2');
-
       emit(TranslatorStateLoading());
       final (newOriginal, newMorse) = switch (resume) {
-        TranslatorResume.textToMorse => (eventOriginal, _textToMorse(eventOriginal)),
-        TranslatorResume.morseToText => (_morseToText(eventMorse), eventMorse),
+        TranslatorResume.textToMorse => (
+            text,
+            _textToMorse(text)
+          ),
+        TranslatorResume.morseToText => (
+          _morseToText(text), 
+          text,
+        ),
       };
 
       if (newOriginal == null || newMorse == null) {
@@ -65,13 +64,18 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
 
       _currentMorse = newMorse;
       _currentOriginal = newOriginal;
-      print('FOOBAR 3 - $_currentMorse $_currentOriginal');
       await _emitReady(emit);
     } catch (_) {
       emit(TranslatorStateError(errMessage: 'errMessage'));
       await Future.delayed(const Duration(milliseconds: 200));
       await _emitReady(emit);
     }
+  }
+
+  Future<void> _onClear(Emitter<TranslatorState> emit) async {
+    _currentMorse = '';
+    _currentOriginal = '';
+    await _emitReady(emit);
   }
 
   Future<void> _emitReady(Emitter<TranslatorState> emit) async {

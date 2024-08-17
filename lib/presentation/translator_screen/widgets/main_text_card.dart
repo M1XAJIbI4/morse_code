@@ -4,10 +4,12 @@ part of '../translator_screen.dart';
 class _MainTextCard extends StatefulWidget {
   final TextEditingController textController;
   final ValueListenable<SupLocale> localeListenable;
+  final VoidCallback onClearTap;
 
   const _MainTextCard({
     required this.textController,
     required this.localeListenable,
+    required this.onClearTap,
   });
 
   @override
@@ -74,7 +76,6 @@ class _MainTextCardState extends State<_MainTextCard> {
       _AssetsIconButton(onPressed: _onSpeakButtonTap, iconPath: Assets.images.speakIcon.path,),
       const Spacer(),
       _AssetsIconButton(onPressed: _onCloseButtonTap, iconPath: Assets.images.closeIcon.path),
-      // _CloseButton(onPressed: _onCloseButtonTap),
     ],
   );
 
@@ -115,10 +116,10 @@ class _MainTextCardState extends State<_MainTextCard> {
   
   void _onTranslateTap() {
     final text = _getCurrentText();
+    print('FOBOAR UI TE - $text');
     if (text.isNotEmpty && text != _translatorBloc.currentOriginal) {
       _translatorBloc.add(TranslatorTranslateEvent(
-        originalText: text, 
-        morseText: null,
+        text: text, 
         resume: _currentResume,
       ));
     }
@@ -127,7 +128,7 @@ class _MainTextCardState extends State<_MainTextCard> {
   //TODO: implement
   void _onSpeakButtonTap() => print('FOOBAR');
 
-  void _onCloseButtonTap() => print('FOOBAR on close tap');
+  void _onCloseButtonTap() => widget.onClearTap.call();
 
   String _getCurrentText() => _textController.value.text;
 
@@ -151,10 +152,4 @@ class _MainTextCardState extends State<_MainTextCard> {
         )
     );
   } 
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
 }

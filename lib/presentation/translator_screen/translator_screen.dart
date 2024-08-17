@@ -32,7 +32,8 @@ class TranslatorScreen extends StatefulWidget {
 class _TranslatorScreenState extends State<TranslatorScreen> {
   final _currentSupLocaleNotifier = ValueNotifier<SupLocale>(SupLocale.enEN);
 
-  final _textController = TextEditingController();
+  final _mainTextContoller = TextEditingController();
+  final _bottomTextController = TextEditingController();
 
   late final TranslatorBloc _translatorBloc;
   late final TranslatorResumeCubit _translatorResumeCubit;
@@ -46,15 +47,31 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<TranslatorBloc, TranslatorState>(
-      bloc: _translatorBloc,
-      listener: (_, state) {
-        switch (state) {
-          case TranslatorStateError _: print('FO');
-
-          default: () {};
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<TranslatorBloc, TranslatorState>(
+          bloc: _translatorBloc,
+          listener: (_, state) {
+            switch (state) {
+              //TODO: implement
+              case TranslatorStateError _: print('FO ERROR ');
+              case TranslatorStateReady ready: _translateListener(
+                ready.originalText,
+                ready.morseText,
+                _translatorResumeCubit.currentResume,
+              );
+              default: () {};
+            }
+          }),
+        BlocListener<TranslatorResumeCubit, TranslatorResume>(
+          bloc: _translatorResumeCubit,
+          listener: (_, resume) => _translateListener(
+            _translatorBloc.currentOriginal,
+            _translatorBloc.currentMorse,
+            resume,
+          ),
+        )
+      ], 
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20) +
@@ -71,7 +88,8 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
               // top card
               _MainTextCard(
                 localeListenable: _currentSupLocaleNotifier,
-                textController: _textController,
+                textController: _mainTextContoller,
+                onClearTap: _onClearTap,
               ),
               const Gap(16),
         
@@ -87,14 +105,35 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
     );
   }
 
+  void _translateListener(
+    String originalText,
+    String morseText,
+    TranslatorResume resume,
+  ) {
+    final (mainText, bottomText) = switch (resume) {
+      TranslatorResume.textToMorse => (originalText, morseText),
+      TranslatorResume.morseToText => (morseText, originalText),
+    };
+    if (_mainTextContoller.value.text != mainText) {
+      _mainTextContoller.text = mainText;
+    }
+
+    if (_bottomTextController.value.text != bottomText) {
+      _bottomTextController.text = bottomText;
+    }
+  }
+
   void _changeLocale() {}
 
   void _onSwapPressed() => _translatorResumeCubit.changeResume();
 
+  void _onClearTap() => _translatorBloc.add(TranslatorClearEvent());
+
   @override
   void dispose() {
     _currentSupLocaleNotifier.dispose();
-    _textController.dispose();
+    _mainTextContoller.dispose();
+    _bottomTextController.dispose();
     super.dispose();
   }
 }

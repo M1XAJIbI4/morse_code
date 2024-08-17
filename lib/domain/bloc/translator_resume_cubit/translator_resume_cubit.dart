@@ -13,4 +13,5 @@ class TranslatorResumeCubit extends Cubit<TranslatorResume> {
     emit(newResume);
   }
 
+  TranslatorResume get currentResume => state;
 }
