@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:morse_code/domain/models/morse_phrase.dart';
 import 'package:rxdart/subjects.dart';
 
-@preResolve
 @LazySingleton()
 class LocaleStorageSource {
 
