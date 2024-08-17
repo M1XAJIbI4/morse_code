@@ -25,6 +25,9 @@ class StarIconButton extends StatelessWidget {
           icon: Transform.scale(
             scale: 2,
             child: IconButton(
+              style: ButtonStyle(
+                foregroundColor: WidgetStatePropertyAll(ApplicationTheme.APPBAR_COLOR.withOpacity(0.25))
+                ),
               icon: SvgPicture.asset(
                 Assets.images.starActiveIcon.path,
               ),

@@ -4,10 +4,12 @@ import 'package:morse_code/presentation/application/application.dart';
 class CardDecoration extends StatelessWidget {
   final Widget child;
   final EdgeInsets? padding;
+  final double borderRadius;
 
   const CardDecoration({
     required this.child,
     this.padding,
+    this.borderRadius = 16.0,
     super.key,
   });
 
@@ -18,7 +20,7 @@ class CardDecoration extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: ApplicationTheme.CARD_COLOR.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(borderRadius),
           border: Border.all(
             color: ApplicationTheme.BORDER_COLOR,
             width: 0.5,

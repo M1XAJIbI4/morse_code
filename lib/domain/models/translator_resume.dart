@@ -1,0 +1,4 @@
+enum TranslatorResume {
+  textToMorse,
+  morseToText,
+}

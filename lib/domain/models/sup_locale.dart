@@ -1,7 +1,8 @@
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 1)
+part 'sup_locale.g.dart';
 
+@HiveType(typeId: 1)
 enum SupLocale {
   @HiveField(0)
   enEN,

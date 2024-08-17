@@ -19,12 +19,12 @@ class DesignTitleText extends StatelessWidget {
       height: 19.0,
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 16.0,
           fontFamily: FontFamily.roboto,
           height: 18.75 / 16,
-          color: ApplicationTheme.ACTIVE_COLOR,
+          color: color,
         ),
       ),
     );

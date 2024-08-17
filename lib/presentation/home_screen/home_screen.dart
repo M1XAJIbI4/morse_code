@@ -9,7 +9,7 @@ import 'package:morse_code/injection.dart';
 import 'package:morse_code/presentation/design/design_appbar.dart';
 import 'package:morse_code/presentation/design/scaling_button.dart';
 import 'package:morse_code/presentation/favorites_screen/favorites_screen.dart';
-import 'package:morse_code/presentation/home_screen/tabs/translator_tab.dart';
+import 'package:morse_code/presentation/translator_screen/translator_screen.dart';
 
 part 'widgets/home_screen_bottom_bar.dart';
 part 'widgets/tab_icon.dart';
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Widget _getTab(HomeScreenTab tab) => switch (tab) {
-    HomeScreenTab.translateTab => const TranslatorTab(),
+    HomeScreenTab.translateTab => const TranslatorScreen(),
     HomeScreenTab.favoritesTab => const FavoritesScreen(),
   };
 
