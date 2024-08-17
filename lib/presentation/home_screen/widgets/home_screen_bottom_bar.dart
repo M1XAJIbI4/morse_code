@@ -30,13 +30,18 @@ class _HomeScreenBottomBar extends StatelessWidget {
           activeTabListenable: activeTabListenable);
       result.add(icon);
       if (HomeScreenTab.values.last != tab) {
-        result.add(_getSeparator());
+        result.add(const _Separator());
       }
     }
     return result;
   }
+}
 
-  Widget _getSeparator() {
+class _Separator extends StatelessWidget {
+  const _Separator();
+
+  @override
+  Widget build(BuildContext context) {
     return Flexible(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 84),

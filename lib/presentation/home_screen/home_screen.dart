@@ -1,9 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bloc.dart';
+import 'package:morse_code/domain/bloc/favorites_phrases_cubit/favorites_phrases_cubit.dart';
 import 'package:morse_code/gen/assets.gen.dart';
+import 'package:morse_code/injection.dart';
 import 'package:morse_code/presentation/design/design_appbar.dart';
 import 'package:morse_code/presentation/design/scaling_button.dart';
+import 'package:morse_code/presentation/favorites_screen/favorites_screen.dart';
+import 'package:morse_code/presentation/home_screen/tabs/translator_tab.dart';
 
 part 'widgets/home_screen_bottom_bar.dart';
 part 'widgets/tab_icon.dart';
@@ -16,8 +22,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  final _activeTabNotifier =
-      ValueNotifier<HomeScreenTab>(HomeScreenTab.translateTab);
+  final _activeTabNotifier = ValueNotifier<HomeScreenTab>(HomeScreenTab.translateTab);
+  
   late final TabController _tabController;
 
   @override
@@ -31,6 +37,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _initListener() {
+    //TODO: implement
+    // _tabController.animation?.addListener(() {
+    //   final value = _tabController.animation?.value;
+    //   final offset = _tabController.offset;
+    //   print('FOOBAR value - $value $offset');
+    // });
     _tabController.addListener(_tabListener);
   }
 
@@ -45,18 +57,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       body: SafeArea(
         child: Stack(
           children: [
-            TabBarView(
+            MultiBlocProvider(
+              providers: [
+                BlocProvider<FavoritesActionBloc>(create: (ctx) => getIt.get<FavoritesActionBloc>()),
+                BlocProvider<FavoritesPhrasesCubit>(create: (ctx) => getIt.get<FavoritesPhrasesCubit>())
+              ],
+              child: TabBarView(
                 physics: const NeverScrollableScrollPhysics(),
                 controller: _tabController,
-                children: [
-                  //TODO: implement
-                  Container(
-                      width: double.infinity, height: 200, color: Colors.red),
-                  Container(
-                      width: double.infinity,
-                      height: 200,
-                      color: Colors.green),
-                ]),
+                children: HomeScreenTab.values.map((e) => _getTab(e)).toList()),
+            ),
             Positioned(
               bottom: 17.0,
               left: 0.0,
@@ -76,6 +86,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void _onTapTapped(HomeScreenTab tab) {
     _tabController.animateTo(tab.tabIndex);
   }
+
+  Widget _getTab(HomeScreenTab tab) => switch (tab) {
+    HomeScreenTab.translateTab => const TranslatorTab(),
+    HomeScreenTab.favoritesTab => const FavoritesScreen(),
+  };
 
   @override
   void dispose() {

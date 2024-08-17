@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:morse_code/domain/models/morse_phrase.dart';
+import 'package:morse_code/domain/models/sup_locale.dart';
 import 'package:morse_code/domain/repository/favorites_repository.dart';
 import 'package:morse_code/domain/utils/uuid_generator.dart';
 
@@ -35,6 +36,7 @@ class FavoritesActionBloc extends Bloc<FavoritesActionEvent, FavoritesActionStat
         id: generateUuid, 
         originalText: event.originalText, 
         morseText: event.morseText,
+        createdAt: DateTime.now(),
       );
       await _favoritesRepository.addFavoritesPhrase(newPhrase);
     } catch (_) {

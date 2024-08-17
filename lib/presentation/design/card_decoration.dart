@@ -19,6 +19,10 @@ class CardDecoration extends StatelessWidget {
         decoration: BoxDecoration(
           color: ApplicationTheme.CARD_COLOR.withOpacity(0.05),
           borderRadius: BorderRadius.circular(16.0),
+          border: Border.all(
+            color: ApplicationTheme.BORDER_COLOR,
+            width: 0.5,
+          )
         ),
         child: Padding(
           padding: padding ??

@@ -4,12 +4,14 @@ class ScalingButton extends StatefulWidget {
   final VoidCallback? onTap;
   final Widget child;
   final Widget? childDisabled;
+  final double lowerBound;
 
   const ScalingButton({
     super.key,
     required this.onTap,
     required this.child,
     this.childDisabled,
+    this.lowerBound = 0.8,
   });
 
   @override
@@ -19,7 +21,7 @@ class ScalingButton extends StatefulWidget {
 class _ScalingButtonState extends State<ScalingButton>
     with TickerProviderStateMixin {
   late final _controller = AnimationController(
-    lowerBound: 0.8,
+    lowerBound: widget.lowerBound,
     upperBound: 1,
     duration: const Duration(milliseconds: 50),
     value: 1,

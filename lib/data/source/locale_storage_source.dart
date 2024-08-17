@@ -23,6 +23,8 @@ class LocaleStorageSource {
         _favoritesPhrasesSubject.add(phrases);
       }
     });
+    final phrases = await getFavoritesPhrases();
+    _favoritesPhrasesSubject.add(phrases);
   }
 
   Future<List<MorsePhrase>> getFavoritesPhrases() async {

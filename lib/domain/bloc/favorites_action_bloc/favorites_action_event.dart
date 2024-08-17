@@ -5,10 +5,12 @@ sealed class FavoritesActionEvent {}
 class FavoritesActionAddPhraseEvent extends FavoritesActionEvent {
   final String originalText;
   final String morseText;
+  final SupLocale locale;
 
   FavoritesActionAddPhraseEvent({
     required this.originalText, 
     required this.morseText,
+    this.locale = SupLocale.enEN,
   });
 }
 

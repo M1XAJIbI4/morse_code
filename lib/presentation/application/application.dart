@@ -16,6 +16,9 @@ class _ApplicationState extends State<Application> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Morse code translator',
+      supportedLocales: const [
+        Locale('en', 'EN'),
+      ],
       theme: ApplicationTheme.lightTheme,
       home: const StartScreen(),
     );
@@ -26,7 +29,10 @@ class ApplicationTheme {
 
   static const APPBAR_COLOR = Color(0xFF009E89);
   static const CANVAS_COLOR = Color(0xFFFFFBFE);
+  static const SHADOW_COLOR = Color(0xFF11DABF);
   static const CARD_COLOR = Color(0xFF6750A4);
+  static const ACTIVE_COLOR = Color(0xFF003366);
+  static const BORDER_COLOR = Color(0xFFC4C4C4);
 
   static final lightTheme = ThemeData(
     cardColor: CARD_COLOR.withOpacity(0.05),
