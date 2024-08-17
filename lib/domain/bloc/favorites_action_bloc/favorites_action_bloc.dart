@@ -22,8 +22,8 @@ class FavoritesActionBloc extends Bloc<FavoritesActionEvent, FavoritesActionStat
     Emitter<FavoritesActionState> emit,
   ) async {
     switch (mainEvent) {
-      case FavoritesActionAddPhraseEvent event: _onAddPhraseEvent(event, emit);
-      case FavoritesActionRemovePhraseEvent event: _onRemoveEvent(event, emit);
+      case FavoritesActionAddPhraseEvent event: await _onAddPhraseEvent(event, emit);
+      case FavoritesActionRemovePhraseEvent event: await _onRemoveEvent(event, emit);
     }
   }
 
