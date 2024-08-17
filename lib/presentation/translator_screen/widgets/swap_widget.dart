@@ -42,7 +42,7 @@ class _SwapWidget extends StatelessWidget {
                         const Gap(10),
                         isDefault 
                             ? _LocaleText(localeListenable: localeListenable) 
-                            : _morseText()
+                            : const MorseText()
                       ],
                     ),
                   );
@@ -68,7 +68,7 @@ class _SwapWidget extends StatelessWidget {
                       children: [
                         !isDefault 
                             ? _LocaleText(localeListenable: localeListenable) 
-                            : _morseText(),
+                            : const MorseText(),
                         const Gap(10),
                         !isDefault 
                             ? _flagIcon() 
@@ -88,18 +88,15 @@ class _SwapWidget extends StatelessWidget {
   Widget _morseIcon() => SvgPicture.asset(Assets.images.morseIcon.path);
 
   Widget _flagIcon() => SvgPicture.asset(Assets.images.enFlagIcon.path);
-
-  Widget _morseText() => const DesignTitleText(
-    text: 'Morse',
-    color: Colors.black,
-  );
 }
 
 class _LocaleText extends StatelessWidget {
   final ValueListenable<SupLocale> localeListenable;
+  final Color textColor;
 
   const _LocaleText({
     required this.localeListenable,
+    this.textColor = Colors.black,
   });
 
   @override
@@ -108,7 +105,7 @@ class _LocaleText extends StatelessWidget {
       valueListenable: localeListenable,
       builder: (_, supLocale, __) => DesignTitleText(
         text: supLocale.title,
-        color: Colors.black,
+        color: textColor,
       ),
     );
   }

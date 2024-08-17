@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bloc.dart';
 import 'package:morse_code/domain/bloc/favorites_phrases_cubit/favorites_phrases_cubit.dart';
+import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/injection.dart';
 import 'package:morse_code/presentation/design/design_appbar.dart';
@@ -54,29 +55,37 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const DesignAppbar(),
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Stack(
-          children: [
-            MultiBlocProvider(
-              providers: [
-                BlocProvider<FavoritesActionBloc>(create: (ctx) => getIt.get<FavoritesActionBloc>()),
-                BlocProvider<FavoritesPhrasesCubit>(create: (ctx) => getIt.get<FavoritesPhrasesCubit>())
-              ],
-              child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _tabController,
-                children: HomeScreenTab.values.map((e) => _getTab(e)).toList()),
-            ),
-            Positioned(
-              bottom: 17.0,
-              left: 0.0,
-              right: 0.0,
-              child: _HomeScreenBottomBar(
-                onTapTapped: (tab) => _onTapTapped(tab), 
-                activeTabListenable: _activeTabNotifier,
+        child: GestureDetector(
+          onTap: () {
+            print('FOOBAR on tap');
+            FocusScope.of(context).unfocus();
+          },
+          child: Stack(
+            children: [
+              MultiBlocProvider(
+                providers: [
+                  BlocProvider<FavoritesActionBloc>(create: (ctx) => getIt.get<FavoritesActionBloc>()),
+                  BlocProvider<FavoritesPhrasesCubit>(create: (ctx) => getIt.get<FavoritesPhrasesCubit>()),
+                  BlocProvider<TranslatorBloc>(create: (ctx) => getIt.get<TranslatorBloc>()),
+                ],
+                child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _tabController,
+                  children: HomeScreenTab.values.map((e) => _getTab(e)).toList()),
+              ),
+              Positioned(
+                bottom: 17.0,
+                left: 0.0,
+                right: 0.0,
+                child: _HomeScreenBottomBar(
+                  onTapTapped: (tab) => _onTapTapped(tab), 
+                  activeTabListenable: _activeTabNotifier,
+                )
               )
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

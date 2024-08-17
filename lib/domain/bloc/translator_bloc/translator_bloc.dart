@@ -45,10 +45,13 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
         event.morseText,
       );
 
+      print('FOOBAR 1 -$resume $eventOriginal $eventMorse');
       if (eventOriginal == _currentOriginal ||
           eventMorse == _currentMorse) {
         return;
       }
+
+      print('FOOBAR 2');
 
       emit(TranslatorStateLoading());
       final (newOriginal, newMorse) = switch (resume) {
@@ -62,7 +65,7 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
 
       _currentMorse = newMorse;
       _currentOriginal = newOriginal;
-
+      print('FOOBAR 3 - $_currentMorse $_currentOriginal');
       await _emitReady(emit);
     } catch (_) {
       emit(TranslatorStateError(errMessage: 'errMessage'));
@@ -93,4 +96,7 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
     }
     return result;
   }
+
+  String get currentOriginal => _currentOriginal;
+  String get currentMorse => _currentMorse;
 }
