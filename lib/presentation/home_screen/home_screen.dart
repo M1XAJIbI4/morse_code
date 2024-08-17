@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bloc.dart';
 import 'package:morse_code/domain/bloc/favorites_phrases_cubit/favorites_phrases_cubit.dart';
 import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
+import 'package:morse_code/domain/bloc/translator_resume_cubit/translator_resume_cubit.dart';
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/injection.dart';
 import 'package:morse_code/presentation/design/design_appbar.dart';
@@ -69,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   BlocProvider<FavoritesActionBloc>(create: (ctx) => getIt.get<FavoritesActionBloc>()),
                   BlocProvider<FavoritesPhrasesCubit>(create: (ctx) => getIt.get<FavoritesPhrasesCubit>()),
                   BlocProvider<TranslatorBloc>(create: (ctx) => getIt.get<TranslatorBloc>()),
+                  BlocProvider<TranslatorResumeCubit>(create: (ctx) => getIt.get<TranslatorResumeCubit>()),
                 ],
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),

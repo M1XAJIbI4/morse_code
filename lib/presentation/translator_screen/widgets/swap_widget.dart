@@ -3,13 +3,11 @@ part of '../translator_screen.dart';
 class _SwapWidget extends StatelessWidget {
   final VoidCallback onLocalePressed;
   final ValueListenable<SupLocale> localeListenable;
-  final ValueListenable<TranslatorResume> resumeListenable;
   final VoidCallback onSwapPressed;
 
   const _SwapWidget({
     required this.onLocalePressed,
     required this.localeListenable,
-    required this.resumeListenable,
     required this.onSwapPressed,
   });
 
@@ -26,9 +24,9 @@ class _SwapWidget extends StatelessWidget {
           children: [
             SizedBox(
               width: 90,
-              child: ValueListenableBuilder<TranslatorResume>(
-                valueListenable: resumeListenable,
-                builder: (_, resume, __ ) {
+              child: BlocBuilder<TranslatorResumeCubit, TranslatorResume>(
+                bloc: context.read<TranslatorResumeCubit>(),
+                builder: (_, resume) {
                   final isDefault = resume == TranslatorResume.textToMorse;
                   return AnimatedSwitcher(
                     duration: kThemeAnimationDuration,
@@ -46,8 +44,8 @@ class _SwapWidget extends StatelessWidget {
                       ],
                     ),
                   );
-                },
-              ),
+                }
+              )
             ),
 
             _SwapButton(
@@ -56,9 +54,9 @@ class _SwapWidget extends StatelessWidget {
 
             SizedBox(
               width: 90,
-              child: ValueListenableBuilder<TranslatorResume>(
-                valueListenable: resumeListenable,
-                builder: (_, resume, __ ) {
+              child: BlocBuilder<TranslatorResumeCubit, TranslatorResume>(
+                bloc: context.read<TranslatorResumeCubit>(),
+                builder: (_, resume) {
                   final isDefault = resume == TranslatorResume.textToMorse;
                   return AnimatedSwitcher(
                     duration: kThemeAnimationDuration,
@@ -77,7 +75,7 @@ class _SwapWidget extends StatelessWidget {
                     ),
                   );
                 },
-              ),
+              )
             ),
           ],
         ),

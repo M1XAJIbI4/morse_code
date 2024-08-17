@@ -3,12 +3,10 @@ part of '../translator_screen.dart';
 
 class _MainTextCard extends StatefulWidget {
   final TextEditingController textController;
-  final ValueListenable<TranslatorResume> translatorResumeListenable;
   final ValueListenable<SupLocale> localeListenable;
 
   const _MainTextCard({
     required this.textController,
-    required this.translatorResumeListenable,
     required this.localeListenable,
   });
 
@@ -20,10 +18,12 @@ class _MainTextCardState extends State<_MainTextCard> {
 
   late final TextEditingController _textController;
   late final TranslatorBloc _translatorBloc;
+  late final TranslatorResumeCubit _translatorResumeCubit;
 
   @override
   void initState() {
     _translatorBloc = context.read<TranslatorBloc>();
+    _translatorResumeCubit = context.read<TranslatorResumeCubit>();
     _textController = widget.textController;
     super.initState();
   }
@@ -54,9 +54,9 @@ class _MainTextCardState extends State<_MainTextCard> {
     children: [
       SizedBox(
         width: 56,
-        child: ValueListenableBuilder<TranslatorResume>(
-          valueListenable: widget.translatorResumeListenable, 
-          builder: (_, resume, __) {
+        child: BlocBuilder<TranslatorResumeCubit, TranslatorResume>(
+          bloc: _translatorResumeCubit,
+          builder: (_, resume) {
             const textColor = ApplicationTheme.ACTIVE_COLOR;
             return AnimatedSwitcher(
               duration: kThemeAnimationDuration,
@@ -68,7 +68,7 @@ class _MainTextCardState extends State<_MainTextCard> {
                   : const MorseText(color: textColor)
             );
           },
-        ),
+        )
       ),
       const Gap(8.0),
       _AssetsIconButton(onPressed: _onSpeakButtonTap, iconPath: Assets.images.speakIcon.path,),
@@ -80,23 +80,18 @@ class _MainTextCardState extends State<_MainTextCard> {
 
   Widget _textFieldWidget() => Padding(
     padding: const EdgeInsets.only(right: 10),
-    child: ValueListenableBuilder<TranslatorResume>(
-      valueListenable: widget.translatorResumeListenable,
-      builder: (_, resume, __) {
-        return TextField(
-          controller: _textController,
-          cursorColor: ApplicationTheme.APPBAR_COLOR,
-          maxLines: null,
-          decoration: InputDecoration(
-            focusedBorder: InputBorder.none,
-            enabledBorder: UnderlineInputBorder(      
-              borderSide: BorderSide(
-                color: ApplicationTheme.ACTIVE_COLOR.withOpacity(0.3),
-              ),
-            ),  
+    child: TextField(
+      controller: _textController,
+      cursorColor: ApplicationTheme.APPBAR_COLOR,
+      maxLines: null,
+      decoration: InputDecoration(
+        focusedBorder: InputBorder.none,
+        enabledBorder: UnderlineInputBorder(      
+          borderSide: BorderSide(
+            color: ApplicationTheme.ACTIVE_COLOR.withOpacity(0.3),
           ),
-        );
-      } ,
+        ),  
+      ),
     ),
   );
 
@@ -136,7 +131,7 @@ class _MainTextCardState extends State<_MainTextCard> {
 
   String _getCurrentText() => _textController.value.text;
 
-  TranslatorResume get _currentResume => widget.translatorResumeListenable.value;
+  TranslatorResume get _currentResume => _translatorResumeCubit.state;
 
   Future<void> _onClipboardButtonTap() async {
     final text = _getCurrentText();
