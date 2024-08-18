@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:gap/gap.dart';
+import 'package:morse_code/domain/bloc/audio_cubit.dart/audio_cubit.dart';
 import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bloc.dart';
 import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
 import 'package:morse_code/domain/bloc/translator_resume_cubit/translator_resume_cubit.dart';
 import 'package:morse_code/domain/models/sup_locale.dart';
 import 'package:morse_code/domain/models/translator_resume.dart';
-import 'package:morse_code/domain/utils/audio_service.dart';
-import 'package:morse_code/domain/utils/translator_service.dart';
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/gen/fonts.gen.dart';
+import 'package:morse_code/injection.dart';
 import 'package:morse_code/presentation/application/application.dart';
 import 'package:morse_code/presentation/design/card_decoration.dart';
 import 'package:morse_code/presentation/design/design_dialogs.dart';
@@ -47,6 +46,7 @@ class TranslatorScreen extends StatefulWidget {
 
 class _TranslatorScreenState extends State<TranslatorScreen> {
   final _currentSupLocaleNotifier = ValueNotifier<SupLocale>(SupLocale.enEN);
+  final _audioCubit = getIt.get<AudioCubit>();
 
   late final TextEditingController _mainTextContoller;
   late final TextEditingController _bottomTextController;
@@ -117,26 +117,15 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
 
   void _onSpeakButtonTap(_CardType type) {
     final text = _getTextControllerTextByType(type);
-    
     if (text.isEmpty) return;
 
     final resume = _translatorResumeCubit.state;
-
     final isMorseText = switch (type) {
       _CardType.main => resume == TranslatorResume.morseToText,
       _CardType.bottom => resume == TranslatorResume.textToMorse,
     };
 
-    if (isMorseText) {
-      AudioService.playMorse(TranslatorService.formatText(text));
-    } else {
-      FlutterTts()
-      ..setLanguage('En')
-      // Only supportes on Android
-       ..setQueueMode(1)
-      ..speak(text);
-    }
-    
+    _audioCubit.play(text: text, isMorseText: isMorseText); 
   }
 
   Future<void> _copyToClipboard(_CardType type) async {
@@ -174,6 +163,7 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
   @override
   void dispose() {
     _currentSupLocaleNotifier.dispose();
+    _audioCubit.close();
     super.dispose();
   }
 }

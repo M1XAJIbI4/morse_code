@@ -51,12 +51,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _initListener() {
-    //TODO: implement
-    // _tabController.animation?.addListener(() {
-    //   final value = _tabController.animation?.value;
-    //   final offset = _tabController.offset;
-    //   print('FOOBAR value - $value $offset');
-    // });
     _tabController.addListener(_tabListener);
   }
 
