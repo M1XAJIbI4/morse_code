@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:gap/gap.dart';
 import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bloc.dart';
 import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
@@ -127,6 +128,12 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
 
     if (isMorseText) {
       AudioService.playMorse(TranslatorService.formatText(text));
+    } else {
+      final tts = FlutterTts();
+      tts.setLanguage('En');
+      tts.speak(text).then((v) {
+        print("FOBOAR on complete - $v");
+      });
     }
     
   }

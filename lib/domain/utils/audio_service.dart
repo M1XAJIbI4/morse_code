@@ -19,7 +19,6 @@ abstract final class AudioService {
         audioSources.add(_dashSource());
       }
     }
-
     final playlist = ConcatenatingAudioSource(
       children: audioSources
     );
