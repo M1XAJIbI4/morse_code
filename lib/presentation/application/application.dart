@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:morse_code/gen/fonts.gen.dart';
-import 'package:morse_code/presentation/home_screen/home_screen.dart';
+import 'package:morse_code/presentation/start_screen/start_screen.dart';
 // import 'package:morse_code/presentation/start_screen/start_screen.dart';
 
 class Application extends StatefulWidget {
@@ -21,7 +21,7 @@ class _ApplicationState extends State<Application> {
         Locale('en', 'EN'),
       ],
       theme: ApplicationTheme.lightTheme,
-      home: const HomeScreen(),
+      home: const StartScreen(),
     );
   }
 }
