@@ -6,9 +6,11 @@ import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bl
 import 'package:morse_code/domain/bloc/favorites_phrases_cubit/favorites_phrases_cubit.dart';
 import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
 import 'package:morse_code/domain/bloc/translator_resume_cubit/translator_resume_cubit.dart';
+import 'package:morse_code/domain/models/translator_resume.dart';
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/injection.dart';
 import 'package:morse_code/presentation/design/design_appbar.dart';
+import 'package:morse_code/presentation/design/design_dialogs.dart';
 import 'package:morse_code/presentation/design/scaling_button.dart';
 import 'package:morse_code/presentation/favorites_screen/favorites_screen.dart';
 import 'package:morse_code/presentation/translator_screen/translator_screen.dart';
@@ -24,9 +26,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  final _activeTabNotifier = ValueNotifier<HomeScreenTab>(HomeScreenTab.translateTab);
-  
+  final _activeTabNotifier =
+      ValueNotifier<HomeScreenTab>(HomeScreenTab.translateTab);
+
   late final TabController _tabController;
+
+  final _mainTextController = TextEditingController();
+  final _bottomTextController = TextEditingController();
+
+  final _favoritesBloc = getIt.get<FavoritesActionBloc>();
+  final _phrasesCubit = getIt.get<FavoritesPhrasesCubit>();
+  final _translatorBloc = getIt.get<TranslatorBloc>();
+  final _resumeCubit = getIt.get<TranslatorResumeCubit>();
 
   @override
   void initState() {
@@ -60,32 +71,65 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       body: SafeArea(
         child: GestureDetector(
           onTap: () {
-            print('FOOBAR on tap');
             FocusScope.of(context).unfocus();
           },
           child: Stack(
             children: [
               MultiBlocProvider(
                 providers: [
-                  BlocProvider<FavoritesActionBloc>(create: (ctx) => getIt.get<FavoritesActionBloc>()),
-                  BlocProvider<FavoritesPhrasesCubit>(create: (ctx) => getIt.get<FavoritesPhrasesCubit>()),
-                  BlocProvider<TranslatorBloc>(create: (ctx) => getIt.get<TranslatorBloc>()),
-                  BlocProvider<TranslatorResumeCubit>(create: (ctx) => getIt.get<TranslatorResumeCubit>()),
+                  BlocProvider<FavoritesActionBloc>.value(value: _favoritesBloc),
+                  BlocProvider<FavoritesPhrasesCubit>.value(value: _phrasesCubit),
+                  BlocProvider<TranslatorBloc>.value(value: _translatorBloc),
+                  BlocProvider<TranslatorResumeCubit>.value(value: _resumeCubit),
                 ],
-                child: TabBarView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _tabController,
-                  children: HomeScreenTab.values.map((e) => _getTab(e)).toList()),
+                child: MultiBlocListener(
+                  listeners: [
+                    BlocListener<TranslatorBloc, TranslatorState>(
+                        bloc: _translatorBloc,
+                        listener: (_, state) {
+                          switch (state) {
+                            case TranslatorStateError _:
+                              print('FO ERROR ');
+                            case TranslatorStateReady ready:
+                              _translateListener(
+                                ready.originalText,
+                                ready.morseText,
+                                _resumeCubit.currentResume,
+                              );
+                            default:
+                              () {};
+                          }
+                        }),
+                    BlocListener<TranslatorResumeCubit, TranslatorResume>(
+                      bloc: _resumeCubit,
+                      listener: (_, resume) => _translateListener(
+                        _translatorBloc.currentOriginal,
+                        _translatorBloc.currentMorse,
+                        resume,
+                      ),
+                    ),
+                    BlocListener<FavoritesActionBloc, FavoritesActionState>(
+                      listener: (_, actionState) {
+                        if (actionState is FavoritesActionStateAddedSuccess) {
+                          _onSuccessAdded();
+                        }
+                      },
+                    )
+                  ],
+                  child: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _tabController,
+                      children: HomeScreenTab.values.map((e) => _getTab(e)).toList()),
+                ),
               ),
               Positioned(
                 bottom: 17.0,
                 left: 0.0,
                 right: 0.0,
                 child: _HomeScreenBottomBar(
-                  onTapTapped: (tab) => _onTapTapped(tab), 
+                  onTapTapped: (tab) => _onTapTapped(tab),
                   activeTabListenable: _activeTabNotifier,
-                )
-              )
+                ))
             ],
           ),
         ),
@@ -93,21 +137,49 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
+  void _translateListener(
+    String originalText,
+    String morseText,
+    TranslatorResume resume,
+  ) {
+    final (mainText, bottomText) = switch (resume) {
+      TranslatorResume.textToMorse => (originalText, morseText),
+      TranslatorResume.morseToText => (morseText, originalText),
+    };
+    if (_mainTextController.value.text != mainText) {
+      _mainTextController.text = replaceDotsAndDash(mainText);
+    }
+
+    if (_bottomTextController.value.text != bottomText) {
+      _bottomTextController.text = replaceDotsAndDash(bottomText);
+    }
+  }
 
   void _onTapTapped(HomeScreenTab tab) {
     _tabController.animateTo(tab.tabIndex);
   }
 
   Widget _getTab(HomeScreenTab tab) => switch (tab) {
-    HomeScreenTab.translateTab => const TranslatorScreen(),
-    HomeScreenTab.favoritesTab => const FavoritesScreen(),
-  };
+        HomeScreenTab.translateTab => TranslatorScreen(
+            mainController: _mainTextController,
+            bottomController: _bottomTextController,
+          ),
+        HomeScreenTab.favoritesTab => const FavoritesScreen(),
+      };
+
+  void _onSuccessAdded() {
+    _translatorBloc.add(TranslatorClearEvent());
+    if (!mounted) return;
+    DesignDialogs.showSnackbar(context, text: 'Successfully added to saved translations');
+  }
 
   @override
   void dispose() {
     _activeTabNotifier.dispose();
     _tabController.removeListener(_tabListener);
     _tabController.dispose();
+    _mainTextController.dispose();
+    _bottomTextController.dispose();
     super.dispose();
   }
 }

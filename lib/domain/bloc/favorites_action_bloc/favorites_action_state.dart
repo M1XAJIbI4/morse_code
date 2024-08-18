@@ -13,3 +13,7 @@ class FavoritesAcionStateError extends FavoritesActionState {
   final String errMessage;
   FavoritesAcionStateError(this.errMessage);
 }
+
+class FavoritesActionStateRemovedSuccess extends FavoritesActionState {}
+
+class FavoritesActionStateAddedSuccess extends FavoritesActionState {}

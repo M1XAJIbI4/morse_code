@@ -20,9 +20,13 @@ class _ReadyBody extends StatelessWidget {
         duration: kThemeAnimationDuration,
         child: phrases.isEmpty
             ? const _EmptyBody()
-            : ListView.builder(
-                itemCount: phrases.length,
+            : ListView.separated(
+                itemCount: phrases.length + 1,
+                separatorBuilder: (_, __) => const Gap(16),
                 itemBuilder: (_, index) {
+                  if (index == phrases.length) {
+                    return const Gap(100);
+                  }
                   final (item, id) = (phrases[index], phrases[index].id);
                   return _Item(
                     item: item,

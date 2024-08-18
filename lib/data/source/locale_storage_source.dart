@@ -18,9 +18,8 @@ class LocaleStorageSource {
   void _initWatch() async {
     _favoritesBox ??= await Hive.openBox<MorsePhrase>(_favorites);
     _favoritesBox?.watch().listen((event) async {
-      if (event is MorsePhrase) {
-        final phrases = await getFavoritesPhrases();
-        _favoritesPhrasesSubject.add(phrases);
+      if (event.value is MorsePhrase) {
+        _updateStream();
       }
     });
     final phrases = await getFavoritesPhrases();
@@ -40,6 +39,12 @@ class LocaleStorageSource {
   Future<void> removeFavoritePhrase(String id) async {
     _favoritesBox ??= await Hive.openBox<MorsePhrase>(_favorites);
     await _favoritesBox?.delete(id);
+    _updateStream();
+  }
+
+  Future<void> _updateStream() async {
+    final phrases = await getFavoritesPhrases();
+    _favoritesPhrasesSubject.add(phrases);
   }
 
   Stream<List<MorsePhrase>> get favoritesPhrasesStream => _favoritesPhrasesSubject.stream;

@@ -30,7 +30,12 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
       TranslatorInitializeEvent event, Emitter<TranslatorState> emit) async {
     _currentMorse = event.morseText;
     _currentOriginal = event.originalText;
-    await _emitReady(emit);
+    print('FOOBAR _$_currentMorse _$_currentOriginal');
+    emit(TranslatorStateReady(
+      originalText: _currentOriginal,
+      morseText: _currentMorse,
+    ));
+    // await _emitReady(emit);
   }
 
   Future<void> _onTranslate(
@@ -40,7 +45,6 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
     try {
       final (resume, text) = (event.resume, event.text);
 
-      
       if (resume == TranslatorResume.textToMorse && text == _currentOriginal) {
         return;
       }

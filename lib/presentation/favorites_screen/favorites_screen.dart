@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bloc.dart';
 import 'package:morse_code/domain/bloc/favorites_phrases_cubit/favorites_phrases_cubit.dart';
+import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
 import 'package:morse_code/domain/models/morse_phrase.dart';
 import 'package:morse_code/domain/models/sup_locale.dart';
 import 'package:morse_code/presentation/application/application.dart';
@@ -26,14 +28,18 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen> {
 
   late final FavoritesPhrasesCubit _favoritesPhrasesCubit;
-  // late final FavoritesActionBloc _favoritesActionBloc;
+  late final FavoritesActionBloc _favoritesActionBloc;
+  late final TranslatorBloc _translatorBloc;
 
   @override
   void initState() {
     super.initState();
     _favoritesPhrasesCubit = context.read<FavoritesPhrasesCubit>();
-    // _favoritesActionBloc = context.read<FavoritesActionBloc>();
+    _favoritesActionBloc = context.read<FavoritesActionBloc>();
+    _translatorBloc = context.read<TranslatorBloc>();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +52,27 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             FavoritesPhrasesStateLoading _ => const _LoadingBody(),
             FavoritesPhrasesStateReady ready => _ReadyBody(
               phrases: ready.morsePhrases,
-              //TODO: implement
-              onRemovePressed: (id) => print('FOOBAR onRemovePressed id: $id'),
-              onCardPressed: (id) => print('FOOBAR onCardPressed id: $id'),
+              onRemovePressed: _onRemoveTapped,
+              onCardPressed: (id) => _onCardTapped(id, ready.morsePhrases),
             )
           },
         );
       },
     );
+  }
+
+  void _onRemoveTapped(String id) => _favoritesActionBloc.add(
+    FavoritesActionRemovePhraseEvent(id),
+  );
+
+  void _onCardTapped(String id, List<MorsePhrase> phrases) {
+     final index = phrases.indexWhere((e) => e.id == id);
+    if (index > -1) {
+      final item = phrases[index];
+      _translatorBloc.add(TranslatorInitializeEvent(
+        originalText: item.originalText, 
+        morseText: item.morseText,
+      ));
+    }
   }
 }

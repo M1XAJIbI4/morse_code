@@ -21,14 +21,6 @@ class FavoritesPhrasesCubit extends Cubit<FavoritesPhrasesState> {
   void _initialize() {
     _streamSubscription =
         _favoritesRepository.favoritesPhrasesStream.listen((phrases) {
-      if (phrases.isEmpty) {
-        phrases.add(MorsePhrase(
-            id: 'testId',
-            originalText: 'originalText',
-            morseText: 'morseText',
-            createdAt: DateTime.now())
-        );
-      }
       phrases.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       emit(FavoritesPhrasesStateReady(morsePhrases: [...phrases]));
     });
