@@ -75,10 +75,24 @@ class $AssetsImagesGen {
       ];
 }
 
+class $AssetsSoundsGen {
+  const $AssetsSoundsGen();
+
+  /// File path: assets/sounds/dash.mp3
+  String get dash => 'assets/sounds/dash.mp3';
+
+  /// File path: assets/sounds/dot.mp3
+  String get dot => 'assets/sounds/dot.mp3';
+
+  /// List of all assets
+  List<String> get values => [dash, dot];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsSoundsGen sounds = $AssetsSoundsGen();
 }
 
 class AssetGenImage {

@@ -88,13 +88,17 @@ class TranslatorService {
   }
 
   String morseToText(String morse) {
-    final formatted = morse
-        .replaceAll('_', '-')
-        .replaceAll('…', '...')
-        .replaceAll('—', '-');
+    final formatted = formatText(morse);
     return formatted
         .split(' ')
         .map((code) => _reverseMorseCodeMap[code] ?? '')
         .join('');
+  }
+
+  static String formatText(String morseText) {
+    return morseText
+      .replaceAll('_', '-')
+      .replaceAll('…', '...')
+      .replaceAll('—', '-');
   }
 }

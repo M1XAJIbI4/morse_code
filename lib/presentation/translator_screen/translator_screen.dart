@@ -9,6 +9,8 @@ import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
 import 'package:morse_code/domain/bloc/translator_resume_cubit/translator_resume_cubit.dart';
 import 'package:morse_code/domain/models/sup_locale.dart';
 import 'package:morse_code/domain/models/translator_resume.dart';
+import 'package:morse_code/domain/utils/audio_service.dart';
+import 'package:morse_code/domain/utils/translator_service.dart';
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/gen/fonts.gen.dart';
 import 'package:morse_code/presentation/application/application.dart';
@@ -113,8 +115,20 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
   void _onClearTap() => _translatorBloc.add(TranslatorClearEvent());
 
   void _onSpeakButtonTap(_CardType type) {
-    // final text = _getTextControllerTextByType(type);
-    //TODO: imaplement
+    final text = _getTextControllerTextByType(type);
+    if (text.isEmpty) return;
+
+    final resume = _translatorResumeCubit.state;
+
+    final isMorseText = switch (type) {
+      _CardType.main => resume == TranslatorResume.morseToText,
+      _CardType.bottom => resume == TranslatorResume.textToMorse,
+    };
+
+    if (isMorseText) {
+      AudioService.playMorse(TranslatorService.formatText(text));
+    }
+    
   }
 
   Future<void> _copyToClipboard(_CardType type) async {
