@@ -39,7 +39,6 @@ class AudioCubit extends Cubit<AudioState> {
     required String text,
     required bool isMorseText
   }) async {
-
     try {
       await _audioService.play(text, isMorseText);
     } catch (_) {}
