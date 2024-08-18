@@ -33,7 +33,6 @@ class FavoritesActionBloc extends Bloc<FavoritesActionEvent, FavoritesActionStat
     Emitter<FavoritesActionState> emit
   ) async {
     try {
-      print("FOOBAR on add");
       final newPhrase = MorsePhrase(
         id: generateUuid, 
         originalText: event.originalText, 
@@ -41,9 +40,7 @@ class FavoritesActionBloc extends Bloc<FavoritesActionEvent, FavoritesActionStat
         createdAt: DateTime.now(),
       );
       await _favoritesRepository.addFavoritesPhrase(newPhrase);
-      print("FOOBAR on add1");
       emit(FavoritesActionStateAddedSuccess());
-      print("FOOBAR on add2");
     } catch (err) {
       logger.e(err);
       emit(FavoritesAcionStateError('Error adding to favorites'));

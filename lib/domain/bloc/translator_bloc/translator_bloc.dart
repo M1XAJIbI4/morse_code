@@ -30,7 +30,6 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
       TranslatorInitializeEvent event, Emitter<TranslatorState> emit) async {
     _currentMorse = event.morseText;
     _currentOriginal = event.originalText;
-    print('FOOBAR _$_currentMorse _$_currentOriginal');
     emit(TranslatorStateReady(
       originalText: _currentOriginal,
       morseText: _currentMorse,

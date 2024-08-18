@@ -9,6 +9,7 @@ import 'package:morse_code/domain/bloc/translator_resume_cubit/translator_resume
 import 'package:morse_code/domain/models/translator_resume.dart';
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/injection.dart';
+import 'package:morse_code/logger.dart';
 import 'package:morse_code/presentation/design/design_appbar.dart';
 import 'package:morse_code/presentation/design/design_dialogs.dart';
 import 'package:morse_code/presentation/design/scaling_button.dart';
@@ -88,8 +89,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         bloc: _translatorBloc,
                         listener: (_, state) {
                           switch (state) {
-                            case TranslatorStateError _:
-                              print('FO ERROR ');
+                            case TranslatorStateError err: logger.e(err);
                             case TranslatorStateReady ready:
                               _translateListener(
                                 ready.originalText,
