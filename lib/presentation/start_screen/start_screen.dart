@@ -16,7 +16,7 @@ class _StartScreenState extends State<StartScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-       Future.delayed(const Duration(seconds: 2)).then((_) {
+       Future.delayed(const Duration(seconds: 0)).then((_) {
         _pushHomeScreen();
       });
     });
