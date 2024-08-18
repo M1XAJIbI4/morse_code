@@ -11,6 +11,7 @@ class _CardBottomButtons extends StatelessWidget {
     required this.onClipboardButtonTap,
     required this.onFavoriteButtonTap,
     required this.onTranslateButtonTap,
+    super.key,
   });
 
   @override
