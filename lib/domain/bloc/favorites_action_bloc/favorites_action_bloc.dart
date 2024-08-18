@@ -33,8 +33,17 @@ class FavoritesActionBloc extends Bloc<FavoritesActionEvent, FavoritesActionStat
     Emitter<FavoritesActionState> emit
   ) async {
     try {
+      final allPhrases = await _favoritesRepository.getSavedPhrases();
+      MorsePhrase? identicalPhrase;
+      final index = allPhrases.indexWhere(
+        (e) => e.originalText == event.originalText && e.morseText == event.morseText,
+      );
+      if (index > -1) {
+        identicalPhrase = allPhrases[index];
+      }
+  
       final newPhrase = MorsePhrase(
-        id: generateUuid, 
+        id: identicalPhrase?.id ?? generateUuid, 
         originalText: event.originalText, 
         morseText: event.morseText,
         createdAt: DateTime.now(),

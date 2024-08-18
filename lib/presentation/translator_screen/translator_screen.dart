@@ -104,6 +104,7 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
       _translatorBloc.add(
         TranslatorTranslateEvent(text: text, resume: resume),
       );
+      FocusScope.of(context).unfocus();
     }
   }
 

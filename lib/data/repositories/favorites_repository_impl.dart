@@ -22,4 +22,9 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   Future<void> removeFavoritesPhrase(String id) async {
     await _localeStorageSource.removeFavoritePhrase(id);
   }
+  
+  @override
+  Future<List<MorsePhrase>> getSavedPhrases() {
+    return _localeStorageSource.getFavoritesPhrases();
+  }
 }

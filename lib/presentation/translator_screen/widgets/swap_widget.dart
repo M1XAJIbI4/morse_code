@@ -81,9 +81,11 @@ class _SwapWidget extends StatelessWidget {
         ),
       ),
     );
-  }
+}
 
-  Widget _morseIcon() => SvgPicture.asset(Assets.images.morseIcon.path);
+  Widget _morseIcon() => ClipOval(
+    child: SvgPicture.asset(Assets.images.morseIcon.path),
+  );
 
   Widget _flagIcon() => SvgPicture.asset(Assets.images.enFlagIcon.path);
 }

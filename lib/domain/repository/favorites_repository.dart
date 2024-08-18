@@ -6,4 +6,6 @@ abstract interface class FavoritesRepository {
   Future<void> addFavoritesPhrase(MorsePhrase phrase);
 
   Future<void> removeFavoritesPhrase(String id);
+
+  Future<List<MorsePhrase>> getSavedPhrases();
 }
