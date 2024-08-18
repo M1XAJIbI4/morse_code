@@ -40,9 +40,12 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
     try {
       final (resume, text) = (event.resume, event.text);
 
-      if ((resume == TranslatorResume.textToMorse &&
-              text == _currentOriginal) ||
-          (resume == TranslatorResume.morseToText && text == _currentMorse)) {
+      
+      if (resume == TranslatorResume.textToMorse && text == _currentOriginal) {
+        return;
+      }
+
+      if (resume == TranslatorResume.morseToText && text == _currentMorse) {
         return;
       }
 

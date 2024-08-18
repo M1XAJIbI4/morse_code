@@ -29,7 +29,7 @@ class _SwapWidget extends StatelessWidget {
                 builder: (_, resume) {
                   final isDefault = resume == TranslatorResume.textToMorse;
                   return AnimatedSwitcher(
-                    duration: kThemeAnimationDuration,
+                    duration: const Duration(milliseconds: 100),
                     child: Row(
                       key: ValueKey('left$resume'),
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -59,7 +59,7 @@ class _SwapWidget extends StatelessWidget {
                 builder: (_, resume) {
                   final isDefault = resume == TranslatorResume.textToMorse;
                   return AnimatedSwitcher(
-                    duration: kThemeAnimationDuration,
+                    duration: const Duration(milliseconds: 100),
                     child: Row(
                       key: ValueKey('right$resume'),
                       mainAxisAlignment: MainAxisAlignment.end,
