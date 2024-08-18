@@ -36,22 +36,26 @@ class _TranslatorCardState extends State<_TranslatorCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _CardTitleWidget(
-              cardType: widget.cardType, 
-              localeListenable: widget.localeListenable, 
-              onSpeakButtonTap: () => widget.onSpeakButtonTap.call(), 
+              cardType: widget.cardType,
+              localeListenable: widget.localeListenable,
+              onSpeakButtonTap: () => widget.onSpeakButtonTap.call(),
               onClearButtonTap: () => widget.onClearButtonTap.call(),
               key: ValueKey('title${widget.cardType}'),
             ),
-            _CardTextField(
-              cardType: widget.cardType, 
-              textEditingController: widget.textController,
-              key: ValueKey('textField${widget.cardType}'),
+            BlocBuilder<TranslatorResumeCubit, TranslatorResume>(
+              bloc: context.read<TranslatorResumeCubit>(),
+              builder: (_, resume) => _CardTextField(
+                cardType: widget.cardType,
+                textEditingController: widget.textController,
+                resume: resume,
+                key: ValueKey('textField${widget.cardType}'),
+              ),
             ),
             const Gap(16.0),
             _CardBottomButtons(
-              cardType: widget.cardType, 
-              onClipboardButtonTap: () => widget.copyToClipboard.call(), 
-              onFavoriteButtonTap: () => widget.onFavoritesButtonTap.call(), 
+              cardType: widget.cardType,
+              onClipboardButtonTap: () => widget.copyToClipboard.call(),
+              onFavoriteButtonTap: () => widget.onFavoritesButtonTap.call(),
               onTranslateButtonTap: () => widget.onTranslateButtonTap.call(),
               key: ValueKey('bottomButtons${widget.cardType}'),
             ),

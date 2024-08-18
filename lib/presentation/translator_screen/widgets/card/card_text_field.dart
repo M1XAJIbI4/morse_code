@@ -3,10 +3,12 @@ part of '../../translator_screen.dart';
 class _CardTextField extends StatelessWidget {
   final _CardType cardType;
   final TextEditingController textEditingController;
+  final TranslatorResume resume;
 
   const _CardTextField({
     required this.cardType,
     required this.textEditingController,
+    required this.resume,
     super.key,
   });
 
@@ -21,6 +23,25 @@ class _CardTextField extends StatelessWidget {
           cursorColor: ApplicationTheme.APPBAR_COLOR,
           maxLines: null,
           readOnly: cardType == _CardType.bottom,
+          keyboardType: resume == TranslatorResume.textToMorse
+              ? TextInputType.text
+              : TextInputType.text,
+          onChanged: (value) {
+            if (value.contains('…') || value.contains('—') || value.contains('-') || value.contains('//')) {
+              //'—'
+              final formattedValue = replaceDotsAndDash(value)
+                  .replaceAll('//', '/')
+                  .replaceAll('./', '. / ')
+                  .replaceAll('—/', '— / ');
+              textEditingController.text = formattedValue;
+            }
+          },
+          inputFormatters: resume == TranslatorResume.textToMorse
+              ? [FilteringTextInputFormatter(RegExp('[a-z A-Z 0-9]'),
+                  allow: true, 
+                  replacementString: '')
+                ]
+              : [FilteringTextInputFormatter(RegExp('[.…—ы-\\s\\/]'), allow: true)],
           decoration: InputDecoration(
             focusedBorder: InputBorder.none,
             enabledBorder: cardType == _CardType.bottom

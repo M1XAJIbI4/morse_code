@@ -88,13 +88,11 @@ class TranslatorService {
   }
 
   String morseToText(String morse) {
-    final res = morse
-        .split(' ')
-        .map((code) => _reverseMorseCodeMap[code] ?? '')
-        .join('');
-
-        print("FOOBAR FOOBAR - $res");
-    return morse
+    final formatted = morse
+        .replaceAll('_', '-')
+        .replaceAll('…', '...')
+        .replaceAll('—', '-');
+    return formatted
         .split(' ')
         .map((code) => _reverseMorseCodeMap[code] ?? '')
         .join('');

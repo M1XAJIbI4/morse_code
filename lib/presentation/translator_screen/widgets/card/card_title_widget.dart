@@ -1,12 +1,10 @@
 part of '../../translator_screen.dart';
 
-
 class _CardTitleWidget extends StatelessWidget {
   final _CardType cardType;
   final ValueListenable<SupLocale> localeListenable;
   final VoidCallback onSpeakButtonTap;
   final VoidCallback onClearButtonTap;
-
 
   const _CardTitleWidget({
     required this.cardType,
@@ -15,7 +13,6 @@ class _CardTitleWidget extends StatelessWidget {
     required this.onClearButtonTap,
     super.key,
   });
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +31,13 @@ class _CardTitleWidget extends StatelessWidget {
                   _CardType.bottom => TranslatorResume.morseToText,
                 };
                 return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 100),
-                  child: resume == defaultResumeForThisCard
-                      ? _LocaleText(
-                          localeListenable: localeListenable,
-                          textColor: textColor,
-                        )
-                      : const MorseText(color: textColor));
+                    duration: const Duration(milliseconds: 100),
+                    child: resume == defaultResumeForThisCard
+                        ? _LocaleText(
+                            localeListenable: localeListenable,
+                            textColor: textColor,
+                          )
+                        : const MorseText(color: textColor));
               },
             )),
         const Gap(8.0),
@@ -49,10 +46,30 @@ class _CardTitleWidget extends StatelessWidget {
           iconPath: Assets.images.speakIcon.path,
         ),
         const Spacer(),
-        _AssetsIconButton(
-            onPressed: () => onClearButtonTap.call(),
-            iconPath: Assets.images.closeIcon.path),
+        BlocBuilder<TranslatorResumeCubit, TranslatorResume>(
+          bloc: context.read<TranslatorResumeCubit>(),
+          builder: (_, resume) {
+            final isShow = _isShowClearButton(resume, cardType);
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 100),
+              child: isShow
+                  ? _AssetsIconButton(
+                      onPressed: () => onClearButtonTap.call(),
+                      iconPath: Assets.images.closeIcon.path,
+                    )
+                  : const SizedBox(),
+            );
+          },
+        ),
       ],
     );
   }
+
+  bool _isShowClearButton(
+    TranslatorResume resume,
+    _CardType cardType,
+  ) => switch (resume) {
+      TranslatorResume.textToMorse => cardType == _CardType.main,
+      TranslatorResume.morseToText => cardType != _CardType.main,
+    };
 }

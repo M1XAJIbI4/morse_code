@@ -58,7 +58,8 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
             listener: (_, state) {
               switch (state) {
                 //TODO: implement
-                case TranslatorStateError _: print('FO ERROR ');
+                case TranslatorStateError _:
+                  print('FO ERROR ');
                 case TranslatorStateReady ready:
                   _translateListener(
                     ready.originalText,
@@ -100,7 +101,7 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
                   copyToClipboard: () => _copyToClipboard(cardType),
                   onFavoritesButtonTap: () =>
                       print('FOBOAR on favorites button tap'),
-                  onTranslateButtonTap: () => print('TRANSLATE'),
+                  onTranslateButtonTap: _onTranslateTap,
                 );
               })
             ],
@@ -108,13 +109,6 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
         ),
       ),
     );
-  }
-
-  TextEditingController _getControllerByCartType(_CardType type) {
-    return switch (type) {
-      _CardType.main => _mainTextContoller,
-      _CardType.bottom => _bottomTextController,
-    };
   }
 
   void _translateListener(
@@ -127,15 +121,25 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
       TranslatorResume.morseToText => (morseText, originalText),
     };
     if (_mainTextContoller.value.text != mainText) {
-      _mainTextContoller.text = mainText;
+      _mainTextContoller.text = replaceDotsAndDash(mainText);
     }
 
     if (_bottomTextController.value.text != bottomText) {
-      _bottomTextController.text = bottomText;
+      _bottomTextController.text = replaceDotsAndDash(bottomText);
     }
   }
 
   void _changeLocale() {}
+
+  void _onTranslateTap() {
+    final resume = _translatorResumeCubit.currentResume;
+    final text = _mainTextContoller.value.text;
+    if (text.isNotEmpty) {
+      _translatorBloc.add(
+        TranslatorTranslateEvent(text: text, resume: resume),
+      );
+    }
+  }
 
   void _onSwapPressed() => _translatorResumeCubit.changeResume();
 
@@ -164,10 +168,17 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
     ));
   }
 
+  TextEditingController _getControllerByCartType(_CardType type) {
+    return switch (type) {
+      _CardType.main => _mainTextContoller,
+      _CardType.bottom => _bottomTextController,
+    };
+  }
+
   String _getTextControllerTextByType(_CardType type) => switch (type) {
-    _CardType.main => _mainTextContoller.value.text,
-    _CardType.bottom => _bottomTextController.value.text,
-  };
+        _CardType.main => _mainTextContoller.value.text,
+        _CardType.bottom => _bottomTextController.value.text,
+      };
 
   @override
   void dispose() {
@@ -181,4 +192,9 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
 enum _CardType {
   main,
   bottom,
+}
+
+String replaceDotsAndDash(String value) {
+  return value.replaceAll('…', '...')
+              .replaceAll('-', '—');
 }
