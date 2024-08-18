@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:morse_code/domain/bloc/audio_cubit.dart/audio_cubit.dart';
 import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bloc.dart';
 import 'package:morse_code/domain/bloc/favorites_phrases_cubit/favorites_phrases_cubit.dart';
 import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
@@ -39,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final _phrasesCubit = getIt.get<FavoritesPhrasesCubit>();
   final _translatorBloc = getIt.get<TranslatorBloc>();
   final _resumeCubit = getIt.get<TranslatorResumeCubit>();
+  final _audioCubit = getIt.get<AudioCubit>();
 
   @override
   void initState() {
@@ -76,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   BlocProvider<FavoritesPhrasesCubit>.value(value: _phrasesCubit),
                   BlocProvider<TranslatorBloc>.value(value: _translatorBloc),
                   BlocProvider<TranslatorResumeCubit>.value(value: _resumeCubit),
+                  BlocProvider<AudioCubit>.value(value: _audioCubit),
                 ],
                 child: MultiBlocListener(
                   listeners: [

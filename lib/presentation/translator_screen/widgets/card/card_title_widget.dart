@@ -41,9 +41,51 @@ class _CardTitleWidget extends StatelessWidget {
               },
             )),
         const Gap(8.0),
-        _AssetsIconButton(
-          onPressed: () => onSpeakButtonTap.call(),
-          iconPath: Assets.images.speakIcon.path,
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            BlocBuilder<TranslatorResumeCubit, TranslatorResume>(
+              bloc: context.read<TranslatorResumeCubit>(),
+              builder: (_, resume) {
+                return BlocBuilder<AudioCubit, AudioState>(
+                bloc: context.read<AudioCubit>(),
+                builder: (_, state) {
+                  final (isPlayingUsual, isPlayingMorse) = (
+                    state.isPlayingUsualText, 
+                    state.isPlayingMorseText,
+                  );
+
+                  final isIlluminated = _isIlluminatedButton(
+                    isPlayingMorse: isPlayingMorse,
+                    isPlayingUsual: isPlayingUsual,
+                    resume: resume,
+                    cardType: cardType,
+                  );
+              
+                  return Transform.translate(
+                    offset: const Offset(-1.0, 0.0),
+                    child: AnimatedContainer(
+                      width: 30,
+                      height: 30,
+                      duration: const Duration(milliseconds: 100),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isIlluminated 
+                            ? ApplicationTheme.APPBAR_COLOR.withOpacity(0.15) 
+                            : Colors.transparent
+                      ),
+                    ),
+                  );
+                },
+              );
+              },
+            ),
+            _AssetsIconButton(
+              onPressed: () => onSpeakButtonTap.call(),
+              iconPath: Assets.images.speakIcon.path,
+              overlayColor: Colors.transparent,
+            ),
+          ],
         ),
         const Spacer(),
         BlocBuilder<TranslatorResumeCubit, TranslatorResume>(
@@ -65,11 +107,30 @@ class _CardTitleWidget extends StatelessWidget {
     );
   }
 
+  bool _isIlluminatedButton({
+    required bool isPlayingUsual,
+    required bool isPlayingMorse,
+    required _CardType cardType,
+    required TranslatorResume resume,
+  }) {
+    bool result = false;
+    if (isPlayingUsual) {
+      result = ((cardType == _CardType.main) && resume == TranslatorResume.textToMorse) || 
+                        (cardType == _CardType.bottom && resume == TranslatorResume.morseToText);
+
+    } else if (isPlayingMorse) {
+      result = ((cardType == _CardType.bottom) && resume == TranslatorResume.textToMorse) ||
+                        (cardType == _CardType.main && resume == TranslatorResume.morseToText);
+    }
+    return result;
+  }
+
   bool _isShowClearButton(
     TranslatorResume resume,
     _CardType cardType,
-  ) => switch (resume) {
-      TranslatorResume.textToMorse => cardType == _CardType.main,
-      TranslatorResume.morseToText => cardType != _CardType.main,
-    };
+  ) =>
+      switch (resume) {
+        TranslatorResume.textToMorse => cardType == _CardType.main,
+        TranslatorResume.morseToText => cardType != _CardType.main,
+      };
 }

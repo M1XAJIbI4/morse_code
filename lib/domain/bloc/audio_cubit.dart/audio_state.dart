@@ -1,7 +1,9 @@
 part of 'audio_cubit.dart';
 
-sealed class AudioState {}
+class AudioState {
+  final bool isPlayingMorseText;
+  final bool isPlayingUsualText;
 
-class AudioStateInit extends AudioState {}
-class AudioStateProcessing extends AudioCubit {}
-class AudioStateError extends AudioState {}
+  AudioState(
+      {required this.isPlayingMorseText, required this.isPlayingUsualText});
+}

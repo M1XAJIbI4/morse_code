@@ -12,7 +12,6 @@ import 'package:morse_code/domain/models/sup_locale.dart';
 import 'package:morse_code/domain/models/translator_resume.dart';
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/gen/fonts.gen.dart';
-import 'package:morse_code/injection.dart';
 import 'package:morse_code/presentation/application/application.dart';
 import 'package:morse_code/presentation/design/card_decoration.dart';
 import 'package:morse_code/presentation/design/design_dialogs.dart';
@@ -46,7 +45,6 @@ class TranslatorScreen extends StatefulWidget {
 
 class _TranslatorScreenState extends State<TranslatorScreen> {
   final _currentSupLocaleNotifier = ValueNotifier<SupLocale>(SupLocale.enEN);
-  final _audioCubit = getIt.get<AudioCubit>();
 
   late final TextEditingController _mainTextContoller;
   late final TextEditingController _bottomTextController;
@@ -54,6 +52,7 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
   late final TranslatorBloc _translatorBloc;
   late final TranslatorResumeCubit _translatorResumeCubit;
   late final FavoritesActionBloc _actionBloc;
+  late final AudioCubit _audioCubit;
 
   @override
   void initState() {
@@ -63,6 +62,7 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
     _translatorBloc = context.read<TranslatorBloc>();
     _translatorResumeCubit = context.read<TranslatorResumeCubit>();
     _actionBloc = context.read<FavoritesActionBloc>();
+    _audioCubit = context.read<AudioCubit>();
   }
 
   @override

@@ -1,28 +1,54 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:morse_code/domain/utils/audio_service.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'audio_state.dart';
 
 @injectable
 class AudioCubit extends Cubit<AudioState> {
-  AudioCubit(): super(AudioStateInit());
+  final AudioService _audioService;
 
+  AudioCubit(this._audioService): super(AudioState(
+    isPlayingMorseText: false,
+    isPlayingUsualText: false,
+  )) {
+    _initialize();
+  }
+
+  StreamSubscription? _streamSubscription;
+
+  Future<void> _initialize() async {
+    final stateStream = Rx.combineLatest2(
+      _audioService.usualRunnigStream, 
+      _audioService.morseRunnigStream, 
+      (usual, morse) {
+        print("FOOBAR STREAM $morse $usual");
+        return AudioState(
+        isPlayingMorseText: morse, 
+        isPlayingUsualText: usual,
+      );
+      }
+    );
+
+    _streamSubscription = stateStream.listen((state) => emit(state));
+  }
 
   Future<void> play({
     required String text,
     required bool isMorseText
   }) async {
-    if (text.isEmpty || state is AudioStateProcessing) {
-      return;
-    }
 
     try {
-      await AudioService.play(text, isMorseText);
-    } catch (_) {
-      emit(AudioStateError());
-    } finally {
-      emit(AudioStateInit());
-    }
+      await _audioService.play(text, isMorseText);
+    } catch (_) {}
+  }
+
+  @override
+  Future<void> close() {
+    _streamSubscription?.cancel();
+    return super.close();
   }
 }

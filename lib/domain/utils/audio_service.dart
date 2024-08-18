@@ -1,11 +1,12 @@
 import "package:flutter_tts/flutter_tts.dart";
+import "package:injectable/injectable.dart";
 import "package:just_audio/just_audio.dart";
 import "package:morse_code/domain/utils/translator_service.dart";
 import "package:morse_code/gen/assets.gen.dart";
+import "package:rxdart/rxdart.dart";
 
-//TODO: refactored
-abstract final class AudioService {
-
+@Singleton()
+class AudioService {
   static AudioPlayer? _listPlayer;
   static FlutterTts? _tts;
 
@@ -13,21 +14,23 @@ abstract final class AudioService {
   static const dash = '-';
   static const space = ' ';
 
-  static bool _isRunningUsual = false;
-  static bool _isRunnigMorse = false;
+  bool _isRunningUsual = false;
+  bool _isRunningMorse = false;
 
-  static Future<void> play(String text, bool isMorseText) async {
-    if (isMorseText && _isRunnigMorse) {
+  final _morseSubject = BehaviorSubject<bool>();
+  final _usualSubject = BehaviorSubject<bool>();
+
+  Future<void> play(String text, bool isMorseText) async {
+    if (isMorseText && _isRunningMorse) {
       await _stopMorsePlayer();
       return;
     }
 
     if (isMorseText && _isRunningUsual) {
       await _stopUsualPlayer();
-      _isRunningUsual = false;
     }
 
-    if (!isMorseText && _isRunnigMorse) {
+    if (!isMorseText && _isRunningMorse) {
       await _stopMorsePlayer();
     }
 
@@ -36,14 +39,14 @@ abstract final class AudioService {
       return;
     }
 
-    if (_isRunningUsual || _isRunnigMorse) {
+    if (_isRunningUsual || _isRunningMorse) {
       return;
     }
 
     isMorseText ? await _playMorse(text) : await _playUsualText(text);
   }
 
-  static Future<void> _playMorse(String message) async {
+  Future<void> _playMorse(String message) async {
     if (_listPlayer != null) return;
     _listPlayer = AudioPlayer()..setShuffleModeEnabled(false);
     final audioSources = <AudioSource>[];
@@ -60,7 +63,7 @@ abstract final class AudioService {
     }
     final playlist = ConcatenatingAudioSource(children: audioSources);
 
-    _isRunnigMorse = true;
+    _setMorseRunning(true);
     await _listPlayer?.setAudioSource(
       playlist,
       initialIndex: 0,
@@ -70,16 +73,16 @@ abstract final class AudioService {
     await _listPlayer?.play();
     await _listPlayer?.dispose();
     _listPlayer = null;
-    _isRunnigMorse = false;
+    _setMorseRunning(false);
   }
 
-  static Future<void> _playUsualText(String text) async {
+  Future<void> _playUsualText(String text) async {
     if (_tts != null) return;
-    _isRunningUsual = true;
+    _setUsualRunning(true);
     _tts ??= FlutterTts()..setLanguage('En');
 
     _tts?.setCompletionHandler(() {
-      _isRunningUsual = false;
+      _setUsualRunning(false);
       _tts?.stop();
       _tts = null;
     });
@@ -87,20 +90,32 @@ abstract final class AudioService {
     await _tts?.speak(text);
   }
 
-  static Future<void> _stopUsualPlayer() async {
+  Future<void> _stopUsualPlayer() async {
     await _tts?.stop();
     _tts = null;
-    _isRunningUsual = false;
+    _setUsualRunning(false);
   }
 
-  static Future<void> _stopMorsePlayer() async {
+  Future<void> _stopMorsePlayer() async {
     await _listPlayer?.dispose();
     _listPlayer = null;
-    _isRunnigMorse = false;
+    _setMorseRunning(false);
   }
 
-  static AudioSource _dotSource() => AudioSource.asset(Assets.sounds.dot);
-  static AudioSource _dashSource() => AudioSource.asset(Assets.sounds.dash);
-  static AudioSource _voidSource() =>
-      AudioSource.asset(Assets.sounds.voidSpace);
+  void _setUsualRunning(bool value) {
+    _isRunningUsual = value;
+    _usualSubject.add(value);
+  }
+
+  void _setMorseRunning(bool value) {
+    _isRunningMorse = value;
+    _morseSubject.add(value);
+  }
+
+  AudioSource _dotSource() => AudioSource.asset(Assets.sounds.dot);
+  AudioSource _dashSource() => AudioSource.asset(Assets.sounds.dash);
+  AudioSource _voidSource() => AudioSource.asset(Assets.sounds.voidSpace);
+
+  Stream<bool> get morseRunnigStream => _morseSubject.stream;
+  Stream<bool> get usualRunnigStream => _usualSubject.stream;
 }
