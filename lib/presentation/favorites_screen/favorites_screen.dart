@@ -19,7 +19,12 @@ part 'widgets/loading_body.dart';
 part 'widgets/ready_body.dart';
 
 class FavoritesScreen extends StatefulWidget {
-  const FavoritesScreen({super.key});
+  final VoidCallback onCardTapped;
+
+  const FavoritesScreen({
+    required this.onCardTapped,
+    super.key,
+  });
 
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
@@ -73,6 +78,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         originalText: item.originalText, 
         morseText: item.morseText,
       ));
+      widget.onCardTapped.call();
     }
   }
 }

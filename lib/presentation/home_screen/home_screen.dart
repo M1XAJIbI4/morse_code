@@ -164,7 +164,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             mainController: _mainTextController,
             bottomController: _bottomTextController,
           ),
-        HomeScreenTab.favoritesTab => const FavoritesScreen(),
+        HomeScreenTab.favoritesTab => FavoritesScreen(
+          onCardTapped: () => _onTapTapped(HomeScreenTab.translateTab),
+        ),
       };
 
   void _onSuccessAdded() {
