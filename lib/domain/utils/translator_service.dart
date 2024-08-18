@@ -80,7 +80,7 @@ class TranslatorService {
   };
 
   String textToMorse(String text) {
-    return text
+    return text.replaceAll(RegExp(r"\s+"), " ",)
         .toUpperCase()
         .split('')
         .map((char) => _morseCodeMap[char] ?? '')
@@ -99,6 +99,7 @@ class TranslatorService {
     return morseText
       .replaceAll('_', '-')
       .replaceAll('…', '...')
-      .replaceAll('—', '-');
+      .replaceAll('—', '-')
+      .replaceAll(RegExp(r"\s+"), " ");
   }
 }

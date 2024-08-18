@@ -84,8 +84,11 @@ class $AssetsSoundsGen {
   /// File path: assets/sounds/dot.mp3
   String get dot => 'assets/sounds/dot.mp3';
 
+  /// File path: assets/sounds/void(space).mp3
+  String get voidSpace => 'assets/sounds/void(space).mp3';
+
   /// List of all assets
-  List<String> get values => [dash, dot];
+  List<String> get values => [dash, dot, voidSpace];
 }
 
 class Assets {

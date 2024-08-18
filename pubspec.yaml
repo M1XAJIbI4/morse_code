@@ -17,7 +17,7 @@ dependencies:
   hive: ^2.2.3
   flutter_bloc: ^8.1.6
   flutter_svg: ^2.0.10+1
-  flutter_tts: ^4.0.2
+  flutter_tts: ^3.5.1
   just_audio: ^0.9.39
   get_it: ^7.7.0
   path_provider: ^2.1.4

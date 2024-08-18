@@ -117,6 +117,7 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
 
   void _onSpeakButtonTap(_CardType type) {
     final text = _getTextControllerTextByType(type);
+    
     if (text.isEmpty) return;
 
     final resume = _translatorResumeCubit.state;
@@ -129,11 +130,11 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
     if (isMorseText) {
       AudioService.playMorse(TranslatorService.formatText(text));
     } else {
-      final tts = FlutterTts();
-      tts.setLanguage('En');
-      tts.speak(text).then((v) {
-        print("FOBOAR on complete - $v");
-      });
+      FlutterTts()
+      ..setLanguage('En')
+      // Only supportes on Android
+       ..setQueueMode(1)
+      ..speak(text);
     }
     
   }
