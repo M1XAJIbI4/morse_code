@@ -12,7 +12,8 @@ class AudioService {
 
   static const dot = '.';
   static const dash = '-';
-  static const space = ' ';
+  static const spaceLetters = ' ';
+  static const spaceWords = '/';
 
   bool _isRunningUsual = false;
   bool _isRunningMorse = false;
@@ -50,19 +51,20 @@ class AudioService {
     if (_listPlayer != null) return;
     _listPlayer = AudioPlayer()..setShuffleModeEnabled(false);
     final audioSources = <AudioSource>[];
-    final str =
-        TranslatorService.formatText(message).replaceAll(' / ', ' ').split('');
-    for (final char in str) {
-      if (char == dot) {
-        audioSources.add(_dotSource());
-      } else if (char == dash) {
-        audioSources.add(_dashSource());
-      } else if (char == space) {
-        audioSources.add(_voidSource());
-      }
-    }
-    final playlist = ConcatenatingAudioSource(children: audioSources);
+    final formattedMessage = TranslatorService.formatText(message).replaceAll(' / ', '/').split('');
 
+    for (final char in formattedMessage) {
+      final audioSource = switch (char) {
+        dot => _dotSource(),
+        dash => _dashSource(),
+        spaceLetters => _voidSource(),
+        spaceWords => _voidLongSource(),
+        _ => null, 
+      };
+      if (audioSource != null) audioSources.add(audioSource);
+    }
+
+    final playlist = ConcatenatingAudioSource(children: audioSources);
     _setMorseRunning(true);
     await _listPlayer?.setAudioSource(
       playlist,
@@ -114,7 +116,8 @@ class AudioService {
 
   AudioSource _dotSource() => AudioSource.asset(Assets.sounds.dot);
   AudioSource _dashSource() => AudioSource.asset(Assets.sounds.dash);
-  AudioSource _voidSource() => AudioSource.asset(Assets.sounds.voidSpace);
+  AudioSource _voidSource() => AudioSource.asset(Assets.sounds.voidShort);
+  AudioSource _voidLongSource() => AudioSource.asset(Assets.sounds.voidLong);
 
   Stream<bool> get morseRunnigStream => _morseSubject.stream;
   Stream<bool> get usualRunnigStream => _usualSubject.stream;

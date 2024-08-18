@@ -24,8 +24,7 @@ class AudioCubit extends Cubit<AudioState> {
     final stateStream = Rx.combineLatest2(
       _audioService.usualRunnigStream, 
       _audioService.morseRunnigStream, 
-      (usual, morse) {
-        print("FOOBAR STREAM $morse $usual");
+      (usual, morse) {        
         return AudioState(
         isPlayingMorseText: morse, 
         isPlayingUsualText: usual,
