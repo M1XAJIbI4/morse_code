@@ -54,6 +54,7 @@ class _CardTitleWidget extends StatelessWidget {
                     state.isPlayingUsualText, 
                     state.isPlayingMorseText,
                   );
+                  logger.d("SOUND STATE usual: $isPlayingUsual  morse: $isPlayingMorse");
 
                   final isIlluminated = _isIlluminatedButton(
                     isPlayingMorse: isPlayingMorse,

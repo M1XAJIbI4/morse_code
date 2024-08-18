@@ -20,6 +20,11 @@ class AudioService {
 
   final _morseSubject = BehaviorSubject<bool>();
   final _usualSubject = BehaviorSubject<bool>();
+  
+  AudioService() {
+    _setMorseRunning(false);
+    _setUsualRunning(false);
+  }
 
   Future<void> play(String text, bool isMorseText) async {
     if (isMorseText && _isRunningMorse) {
@@ -45,6 +50,16 @@ class AudioService {
     }
 
     isMorseText ? await _playMorse(text) : await _playUsualText(text);
+  }
+
+  Future<void> stop() async {
+    if (_isRunningUsual) {
+      await _stopUsualPlayer();
+    }
+
+    if (_isRunningMorse) {
+      await _stopMorsePlayer();
+    }
   }
 
   Future<void> _playMorse(String message) async {

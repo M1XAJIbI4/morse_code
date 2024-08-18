@@ -12,6 +12,7 @@ import 'package:morse_code/domain/models/sup_locale.dart';
 import 'package:morse_code/domain/models/translator_resume.dart';
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/gen/fonts.gen.dart';
+import 'package:morse_code/logger.dart';
 import 'package:morse_code/presentation/application/application.dart';
 import 'package:morse_code/presentation/design/card_decoration.dart';
 import 'package:morse_code/presentation/design/design_dialogs.dart';
@@ -113,7 +114,10 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
 
   void _onSwapPressed() => _translatorResumeCubit.changeResume();
 
-  void _onClearTap() => _translatorBloc.add(TranslatorClearEvent());
+  void _onClearTap() {
+    _translatorBloc.add(TranslatorClearEvent());
+    _audioCubit.stop();
+  }
 
   void _onSpeakButtonTap(_CardType type) {
     final text = _getTextControllerTextByType(type);
@@ -145,6 +149,7 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
       _actionBloc.add(
         FavoritesActionAddPhraseEvent(originalText: text, morseText: morse),
       );
+      _audioCubit.stop();
     }
   }
 

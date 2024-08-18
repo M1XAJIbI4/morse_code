@@ -45,6 +45,12 @@ class AudioCubit extends Cubit<AudioState> {
     } catch (_) {}
   }
 
+  Future<void> stop() async {
+    try {
+      await _audioService.stop();
+    } catch (_) {}
+  }
+
   @override
   Future<void> close() {
     _streamSubscription?.cancel();
