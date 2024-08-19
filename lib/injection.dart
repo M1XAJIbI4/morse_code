@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 final getIt = GetIt.instance;
 
 Future<void> configureDependencies() async {
-  final hiveDirectory = await getApplicationDocumentsDirectory();
+  final hiveDirectory = await getApplicationSupportDirectory();
   Hive.init(hiveDirectory.path);
   Hive.registerAdapter(MorsePhraseAdapter());
   Hive.registerAdapter(SupLocaleAdapter());
