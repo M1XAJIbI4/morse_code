@@ -36,7 +36,7 @@ class _CardTextField extends StatelessWidget {
             }
           },
           inputFormatters: resume == TranslatorResume.textToMorse
-              ? [FilteringTextInputFormatter(RegExp('[?!,.@"\'&()\$a-z A-Z 0-9]'),
+              ? [FilteringTextInputFormatter(RegExp('[?!,.@"\'&()\$:;+_a-z A-Z 0-9]'),
                   allow: true, 
                   replacementString: '')
                 ]
