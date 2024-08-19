@@ -36,7 +36,25 @@ class TranslatorService {
     '8': '---..',
     '9': '----.',
     '0': '-----',
-    ' ': '/'
+    ' ': '/',
+    '.': '.-.-.-',
+    ',': '--..--',
+    '?': '..--..',
+    '-': '-....-',
+    '\'': '.----.',
+    '"': '.-..-.',
+    ':': '---...',
+    ';': '-.-.-.',
+    '!': '-.-.--',
+    '@': '.--.-.',
+    '\$': '...-..-',
+    '&': '.-...',
+    '(': '-.--.',
+    ')': '-.--.-',
+    '+': '.-.-.',
+    '=': '-...-',
+    '/': '-..-.',
+    '_': '..--.-',
   };
 
   static const Map<String, String> _reverseMorseCodeMap = {
@@ -76,11 +94,30 @@ class TranslatorService {
     '---..': '8',
     '----.': '9',
     '-----': '0',
-    '/': ' '
+    '/': ' ',
+    '.-.-.-': '.',
+    '--..--': ',',
+    '..--..': '?',
+    '-....-': '-',
+    '.----.': '\'',
+    '.-..-.': '"',
+    '---...': ':',
+    '-.-.-.': ';',
+    '-.-.--': '!',
+    '.--.-.': '@',
+    '...-..-': '\$',
+    '.-...': '&',
+    '-.--.': '(',
+    '-.--.-': ')',
+    '.-.-.': '+',
+    '-...-': '=',
+    '-..-.': '/',
+    '..--.-': '_',
   };
 
   String textToMorse(String text) {
-    return text.replaceAll(RegExp(r"\s+"), " ",)
+    return text
+        .replaceAll(RegExp(r"\s+"), " ")
         .toUpperCase()
         .split('')
         .map((char) => _morseCodeMap[char] ?? '')
@@ -97,9 +134,9 @@ class TranslatorService {
 
   static String formatText(String morseText) {
     return morseText
-      .replaceAll('_', '-')
-      .replaceAll('…', '...')
-      .replaceAll('—', '-')
-      .replaceAll(RegExp(r"\s+"), " ");
+        .replaceAll('_', '-')
+        .replaceAll('…', '...')
+        .replaceAll('—', '-')
+        .replaceAll(RegExp(r"\s+"), " ");
   }
 }
