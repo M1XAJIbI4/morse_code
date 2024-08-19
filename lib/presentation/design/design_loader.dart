@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:morse_code/presentation/application/application.dart';
 
-//TODO: change
 class DesignLoader extends StatelessWidget {
   const DesignLoader({super.key});
 
