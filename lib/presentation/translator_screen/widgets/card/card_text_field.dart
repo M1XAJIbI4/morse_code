@@ -27,20 +27,16 @@ class _CardTextField extends StatelessWidget {
               ? TextInputType.text
               : TextInputType.text,
           onChanged: (value) {
-            if (value.contains('…') || value.contains('—') || value.contains('-') || value.contains('//') || value.contains('[') || value.contains(']') || value.contains('\\')) {
-              //'—'
+            if (value.contains('…') || value.contains('—') || value.contains('-') || value.contains('//')) {
               final formattedValue = replaceDotsAndDash(value)
                   .replaceAll('//', '/')
                   .replaceAll('./', '. / ')
-                  .replaceAll('—/', '— / ')
-                  .replaceAll('[', '')
-                  .replaceAll(']', '')
-                  .replaceAll('\\', '');
+                  .replaceAll('—/', '— / ');
               textEditingController.text = formattedValue;
             }
           },
           inputFormatters: resume == TranslatorResume.textToMorse
-              ? [FilteringTextInputFormatter(RegExp('[\\ \'":;!@\$&^()+=/_.,?-a-z A-Z 0-9]'),
+              ? [FilteringTextInputFormatter(RegExp('[?!,.@"\'&()\$a-z A-Z 0-9]'),
                   allow: true, 
                   replacementString: '')
                 ]
