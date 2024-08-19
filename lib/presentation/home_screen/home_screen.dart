@@ -27,7 +27,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, WidgetsBindingObserver {
   final _activeTabNotifier =
       ValueNotifier<HomeScreenTab>(HomeScreenTab.translateTab);
 
@@ -45,11 +45,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _tabController = TabController(
       length: HomeScreenTab.values.length,
       vsync: this,
     );
     _initListener();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      _audioCubit.stop();
+    }
+
   }
 
   void _initListener() {
@@ -174,6 +183,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _activeTabNotifier.dispose();
     _tabController.removeListener(_tabListener);
     _tabController.dispose();
