@@ -1,17 +1,17 @@
 part of '../translator_screen.dart';
 
-class _SwapButton extends StatefulWidget {
+class _ResumeSwapButton extends StatefulWidget {
   final VoidCallback onPressed;
 
-  const _SwapButton({
+  const _ResumeSwapButton({
     required this.onPressed,
   });
 
   @override
-  State<_SwapButton> createState() => _SwapButtonState();
+  State<_ResumeSwapButton> createState() => _ResumeSwapButtonState();
 }
 
-class _SwapButtonState extends State<_SwapButton>
+class _ResumeSwapButtonState extends State<_ResumeSwapButton>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
 

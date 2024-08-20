@@ -20,7 +20,6 @@ class FavoritesActionBloc extends Bloc<FavoritesActionEvent, FavoritesActionStat
     on<FavoritesActionEvent>(_onEvent);
   }
   
-
   Future<void> _onEvent(
     FavoritesActionEvent mainEvent, 
     Emitter<FavoritesActionState> emit,
@@ -68,7 +67,7 @@ class FavoritesActionBloc extends Bloc<FavoritesActionEvent, FavoritesActionStat
       emit(FavoritesActionStateRemovedSuccess());
     } catch (err) {
       logger.e(err);
-      emit(FavoritesAcionStateError('Error removing from favorites'));
+      emit(FavoritesAcionStateError('Error removing from saved'));
     }
   }
 }

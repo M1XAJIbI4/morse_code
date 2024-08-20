@@ -35,7 +35,6 @@ class AudioCubit extends Cubit<AudioState> {
       );
       }
     );
-
     _streamSubscription = stateStream.listen((state) => emit(state));
   }
 

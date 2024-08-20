@@ -15,6 +15,7 @@ import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
 import 'package:morse_code/domain/bloc/translator_resume_cubit/translator_resume_cubit.dart';
 import 'package:morse_code/domain/models/sup_locale.dart';
 import 'package:morse_code/domain/models/translator_resume.dart';
+import 'package:morse_code/domain/utils/text_util.dart';
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/gen/fonts.gen.dart';
 import 'package:morse_code/logger.dart';
@@ -25,8 +26,8 @@ import 'package:morse_code/presentation/design/desing_title_text.dart';
 import 'package:morse_code/presentation/design/morse_text.dart';
 import 'package:morse_code/presentation/design/scaling_button.dart';
 
-part 'widgets/swap_widget.dart';
-part 'widgets/swap_button.dart';
+part 'widgets/resume_swap_widget.dart';
+part 'widgets/resume_swap_button.dart';
 part 'widgets/translate_button.dart';
 part 'widgets/assets_icon_button.dart';
 part 'widgets/card/card_title_widget.dart';
@@ -80,7 +81,7 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _SwapWidget(
+            _ResumeSwapWidget(
               onLocalePressed: () => _changeLocale(),
               localeListenable: _currentSupLocaleNotifier,
               onSwapPressed: () => _onSwapPressed(),

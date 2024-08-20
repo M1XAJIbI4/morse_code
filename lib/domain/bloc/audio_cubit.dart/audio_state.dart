@@ -4,6 +4,8 @@ class AudioState {
   final bool isPlayingMorseText;
   final bool isPlayingUsualText;
 
-  AudioState(
-      {required this.isPlayingMorseText, required this.isPlayingUsualText});
+  AudioState({
+    required this.isPlayingMorseText, 
+    required this.isPlayingUsualText,
+  });
 }

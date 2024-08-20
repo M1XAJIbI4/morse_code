@@ -1,8 +1,8 @@
 part of '../home_screen.dart';
 
 class _HomeScreenBottomBar extends StatelessWidget {
-  final Function(HomeScreenTab) onTapTapped;
-  final ValueListenable<HomeScreenTab> activeTabListenable;
+  final Function(_HomeScreenTab) onTapTapped;
+  final ValueListenable<_HomeScreenTab> activeTabListenable;
 
   const _HomeScreenBottomBar({
     required this.onTapTapped,
@@ -23,13 +23,13 @@ class _HomeScreenBottomBar extends StatelessWidget {
 
   List<Widget> _confugureTabs() {
     final result = <Widget>[];
-    for (final tab in HomeScreenTab.values) {
+    for (final tab in _HomeScreenTab.values) {
       final icon = _TabIcon(
           tab: tab,
           onTap: () => onTapTapped.call(tab),
           activeTabListenable: activeTabListenable);
       result.add(icon);
-      if (HomeScreenTab.values.last != tab) {
+      if (_HomeScreenTab.values.last != tab) {
         result.add(const _Separator());
       }
     }

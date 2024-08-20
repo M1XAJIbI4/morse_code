@@ -33,11 +33,7 @@ class TranslatorBloc extends Bloc<TranslatorEvent, TranslatorState> {
       TranslatorInitializeEvent event, Emitter<TranslatorState> emit) async {
     _currentMorse = event.morseText;
     _currentOriginal = event.originalText;
-    emit(TranslatorStateReady(
-      originalText: _currentOriginal,
-      morseText: _currentMorse,
-    ));
-    // await _emitReady(emit);
+    await _emitReady(emit);
   }
 
   Future<void> _onTranslate(

@@ -1,3 +1,5 @@
+import 'package:morse_code/domain/utils/text_util.dart';
+
 class TranslatorService {
   static const Map<String, String> _morseCodeMap = {
     'A': '.-',
@@ -117,7 +119,7 @@ class TranslatorService {
 
   String textToMorse(String text) {
     return text
-        .replaceAll(RegExp(r"\s+"), " ")
+        .replaceAll(TextUtil.spaceRegex, " ")
         .toUpperCase()
         .split('')
         .map((char) => _morseCodeMap[char] ?? '')
@@ -137,6 +139,6 @@ class TranslatorService {
         .replaceAll('_', '-')
         .replaceAll('…', '...')
         .replaceAll('—', '-')
-        .replaceAll(RegExp(r"\s+"), " ");
+        .replaceAll(TextUtil.spaceRegex, " ");
   }
 }

@@ -1,11 +1,11 @@
 part of '../translator_screen.dart';
 
-class _SwapWidget extends StatelessWidget {
+class _ResumeSwapWidget extends StatelessWidget {
   final VoidCallback onLocalePressed;
   final ValueListenable<SupLocale> localeListenable;
   final VoidCallback onSwapPressed;
 
-  const _SwapWidget({
+  const _ResumeSwapWidget({
     required this.onLocalePressed,
     required this.localeListenable,
     required this.onSwapPressed,
@@ -48,7 +48,7 @@ class _SwapWidget extends StatelessWidget {
               )
             ),
 
-            _SwapButton(
+            _ResumeSwapButton(
               onPressed: () => onSwapPressed.call()
             ),
 

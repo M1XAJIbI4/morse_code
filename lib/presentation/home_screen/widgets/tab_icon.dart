@@ -1,9 +1,9 @@
 part of '../home_screen.dart';
 
 class _TabIcon extends StatelessWidget {
-  final HomeScreenTab tab;
+  final _HomeScreenTab tab;
   final VoidCallback onTap;
-  final ValueListenable<HomeScreenTab> activeTabListenable;
+  final ValueListenable<_HomeScreenTab> activeTabListenable;
 
   const _TabIcon({
     required this.tab,
@@ -18,7 +18,7 @@ class _TabIcon extends StatelessWidget {
       height: 54,
       child: ScalingButton(
         onTap: () {},
-        child: ValueListenableBuilder<HomeScreenTab>(
+        child: ValueListenableBuilder<_HomeScreenTab>(
           valueListenable: activeTabListenable,
           builder: (_, activeTab, __) {
             final isActive = activeTab == tab;

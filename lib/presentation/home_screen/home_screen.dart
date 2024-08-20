@@ -34,7 +34,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, WidgetsBindingObserver {
   final _activeTabNotifier =
-      ValueNotifier<HomeScreenTab>(HomeScreenTab.translateTab);
+      ValueNotifier<_HomeScreenTab>(_HomeScreenTab.translateTab);
 
   late final TabController _tabController;
 
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _tabController = TabController(
-      length: HomeScreenTab.values.length,
+      length: _HomeScreenTab.values.length,
       vsync: this,
     );
     _initListener();
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   }
 
   void _tabListener() {
-    _activeTabNotifier.value = HomeScreenTab.values[_tabController.index];
+    _activeTabNotifier.value = _HomeScreenTab.values[_tabController.index];
   }
 
   @override
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
                   child: TabBarView(
                       physics: const NeverScrollableScrollPhysics(),
                       controller: _tabController,
-                      children: HomeScreenTab.values.map((e) => _getTab(e)).toList()),
+                      children: _HomeScreenTab.values.map((e) => _getTab(e)).toList()),
                 ),
               ),
               Positioned(
@@ -166,19 +166,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
     }
   }
 
-  void _onTapTapped(HomeScreenTab tab) {
-    _tabController.animateTo(tab.tabIndex);
-  }
+  Widget _getTab(_HomeScreenTab tab) => switch (tab) {
+    _HomeScreenTab.translateTab => TranslatorScreen(
+      mainController: _mainTextController,
+        bottomController: _bottomTextController,
+      ),
+    _HomeScreenTab.favoritesTab => FavoritesScreen(
+      onCardTapped: () => _onTapTapped(
+        _HomeScreenTab.translateTab,
+      ),
+    ),
+  };
 
-  Widget _getTab(HomeScreenTab tab) => switch (tab) {
-        HomeScreenTab.translateTab => TranslatorScreen(
-            mainController: _mainTextController,
-            bottomController: _bottomTextController,
-          ),
-        HomeScreenTab.favoritesTab => FavoritesScreen(
-          onCardTapped: () => _onTapTapped(HomeScreenTab.translateTab),
-        ),
-      };
+  void _onTapTapped(_HomeScreenTab tab) => _tabController.animateTo(tab.tabIndex);
 
   void _onSuccessAdded() {
     _translatorBloc.add(TranslatorClearEvent());
@@ -198,27 +198,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   }
 }
 
-enum HomeScreenTab {
+enum _HomeScreenTab {
   translateTab,
   favoritesTab,
 }
 
-extension HomeScreenTabExtension on HomeScreenTab {
+extension _HomeScreenTabExtension on _HomeScreenTab {
   String get iconPath => switch (this) {
-        HomeScreenTab.translateTab => Assets.images.translateTab.path,
-        HomeScreenTab.favoritesTab => Assets.images.favoritesTab.path,
-      };
+    _HomeScreenTab.translateTab => Assets.images.translateTab.path,
+    _HomeScreenTab.favoritesTab => Assets.images.favoritesTab.path,
+  };
 
   int get tabIndex => switch (this) {
-        HomeScreenTab.translateTab => 0,
-        HomeScreenTab.favoritesTab => 1,
-      };
-
-  HomeScreenTab getByIndex(int index) {
-    if (index == 0) {
-      return HomeScreenTab.translateTab;
-    } else {
-      return HomeScreenTab.favoritesTab;
-    }
-  }
+    _HomeScreenTab.translateTab => 0,
+    _HomeScreenTab.favoritesTab => 1,
+  };
 }
