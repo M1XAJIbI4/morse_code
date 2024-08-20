@@ -1,9 +1,14 @@
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+
+// Project imports:
 import 'package:morse_code/domain/bloc/audio_cubit.dart/audio_cubit.dart';
 import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bloc.dart';
 import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
@@ -144,13 +149,18 @@ class _TranslatorScreenState extends State<TranslatorScreen> {
   }
 
   void _onFavoritesButtonTap() {
-    final (text, morse) = (
-      _mainTextContoller.text,
-      _bottomTextController.text,
+    final resume = _translatorResumeCubit.state;
+    final texts = (
+        _mainTextContoller.value.text, 
+        _bottomTextController.value.text,
     );
-    if (text.isNotEmpty && morse.isNotEmpty) {
+    
+    if (texts.$1.isNotEmpty && texts.$2.isNotEmpty) {
       _actionBloc.add(
-        FavoritesActionAddPhraseEvent(originalText: text, morseText: morse),
+        FavoritesActionAddPhraseEvent(
+          originalText: resume == TranslatorResume.textToMorse ? texts.$1 : texts.$2,
+          morseText: resume == TranslatorResume.morseToText ? texts.$1 : texts.$2,
+        ),
       );
       _audioCubit.stop();
     }

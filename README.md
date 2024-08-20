@@ -1,6 +1,6 @@
 # morse_code
 
-A new Flutter project.
+Morse translator application
 
 ## Getting Started
 
@@ -17,3 +17,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Generate code
 flutter pub run build_runner build --delete-conflicting-outputs
+
+```yaml
+# Generate icons
+flutter pub run flutter_launcher_icons:main

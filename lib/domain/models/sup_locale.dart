@@ -1,3 +1,4 @@
+// Package imports:
 import 'package:hive/hive.dart';
 
 part 'sup_locale.g.dart';

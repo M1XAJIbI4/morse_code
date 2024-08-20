@@ -1,9 +1,12 @@
+// Package imports:
 import "package:flutter_tts/flutter_tts.dart";
 import "package:injectable/injectable.dart";
 import "package:just_audio/just_audio.dart";
+import "package:rxdart/rxdart.dart";
+
+// Project imports:
 import "package:morse_code/domain/utils/translator_service.dart";
 import "package:morse_code/gen/assets.gen.dart";
-import "package:rxdart/rxdart.dart";
 
 @Singleton()
 class AudioService {

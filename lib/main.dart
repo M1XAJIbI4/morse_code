@@ -1,8 +1,12 @@
+// Dart imports:
 import 'dart:async';
 
+// Flutter imports:
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Project imports:
 import 'package:morse_code/injection.dart';
 import 'package:morse_code/logger.dart';
 import 'package:morse_code/presentation/application/application.dart';

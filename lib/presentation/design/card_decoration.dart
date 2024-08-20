@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:morse_code/presentation/application/application.dart';
 
 class CardDecoration extends StatelessWidget {

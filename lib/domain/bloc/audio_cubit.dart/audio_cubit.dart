@@ -1,9 +1,13 @@
+// Dart imports:
 import 'dart:async';
 
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:morse_code/domain/utils/audio_service.dart';
 import 'package:rxdart/rxdart.dart';
+
+// Project imports:
+import 'package:morse_code/domain/utils/audio_service.dart';
 
 part 'audio_state.dart';
 

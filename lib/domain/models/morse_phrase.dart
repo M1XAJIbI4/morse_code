@@ -1,4 +1,7 @@
+// Package imports:
 import 'package:hive/hive.dart';
+
+// Project imports:
 import 'package:morse_code/domain/models/sup_locale.dart';
 
 part 'morse_phrase.g.dart';

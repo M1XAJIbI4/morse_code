@@ -1,8 +1,12 @@
 // ignore_for_file: constant_identifier_names
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:morse_code/gen/fonts.gen.dart';
 import 'package:morse_code/presentation/start_screen/start_screen.dart';
+
 // import 'package:morse_code/presentation/start_screen/start_screen.dart';
 
 class Application extends StatefulWidget {

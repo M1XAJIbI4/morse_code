@@ -1,7 +1,12 @@
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+
+// Project imports:
 import 'package:morse_code/domain/bloc/audio_cubit.dart/audio_cubit.dart';
 import 'package:morse_code/domain/bloc/favorites_action_bloc/favorites_action_bloc.dart';
 import 'package:morse_code/domain/bloc/favorites_phrases_cubit/favorites_phrases_cubit.dart';

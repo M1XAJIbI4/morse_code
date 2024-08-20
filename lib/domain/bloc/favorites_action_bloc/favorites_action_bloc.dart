@@ -1,5 +1,8 @@
+// Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+
+// Project imports:
 import 'package:morse_code/domain/models/morse_phrase.dart';
 import 'package:morse_code/domain/models/sup_locale.dart';
 import 'package:morse_code/domain/repository/favorites_repository.dart';

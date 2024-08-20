@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:morse_code/domain/models/morse_phrase.dart';
 
 abstract interface class FavoritesRepository {

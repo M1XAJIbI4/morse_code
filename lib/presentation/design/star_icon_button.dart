@@ -1,5 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_svg/svg.dart';
+
+// Project imports:
 import 'package:morse_code/gen/assets.gen.dart';
 import 'package:morse_code/presentation/application/application.dart';
 

@@ -1,7 +1,10 @@
+// Package imports:
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-import 'package:morse_code/domain/models/morse_phrase.dart';
 import 'package:rxdart/subjects.dart';
+
+// Project imports:
+import 'package:morse_code/domain/models/morse_phrase.dart';
 
 @LazySingleton()
 class LocaleStorageSource {
