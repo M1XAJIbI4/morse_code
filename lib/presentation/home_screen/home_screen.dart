@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:morse_code/dependencies/dependencies.dart';
 
 // Project imports:
 import 'package:morse_code/domain/bloc/audio_cubit.dart/audio_cubit.dart';
@@ -14,7 +15,6 @@ import 'package:morse_code/domain/bloc/translator_bloc/translator_bloc.dart';
 import 'package:morse_code/domain/bloc/translator_resume_cubit/translator_resume_cubit.dart';
 import 'package:morse_code/domain/models/translator_resume.dart';
 import 'package:morse_code/gen/assets.gen.dart';
-import 'package:morse_code/injection.dart';
 import 'package:morse_code/logger.dart';
 import 'package:morse_code/presentation/design/design_appbar.dart';
 import 'package:morse_code/presentation/design/design_dialogs.dart';
@@ -41,11 +41,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
   final _mainTextController = TextEditingController();
   final _bottomTextController = TextEditingController();
 
-  final _favoritesBloc = getIt.get<FavoritesActionBloc>();
-  final _phrasesCubit = getIt.get<FavoritesPhrasesCubit>();
-  final _translatorBloc = getIt.get<TranslatorBloc>();
-  final _resumeCubit = getIt.get<TranslatorResumeCubit>();
-  final _audioCubit = getIt.get<AudioCubit>();
+  late final FavoritesActionBloc _favoritesBloc;
+  late final FavoritesPhrasesCubit _phrasesCubit;
+  late final TranslatorBloc _translatorBloc;
+  late final TranslatorResumeCubit _resumeCubit;
+  late final AudioCubit _audioCubit;
 
   @override
   void initState() {
@@ -55,6 +55,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin, 
       length: _HomeScreenTab.values.length,
       vsync: this,
     );
+    final dependencies = Dependencies.of(context);
+    _favoritesBloc = FavoritesActionBloc(dependencies.favoritesRepository);
+    _phrasesCubit = FavoritesPhrasesCubit(dependencies.favoritesRepository);
+    _audioCubit = AudioCubit(dependencies.audioService);
+    _translatorBloc = TranslatorBloc();
+    _resumeCubit = TranslatorResumeCubit();
+
     _initListener();
   }
 
